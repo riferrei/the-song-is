@@ -235,6 +235,22 @@ data "template_file" "redis_server_bootstrap" {
 }
 
 ###########################################
+######### Jaeger Server Bootstrap #########
+###########################################
+
+data "template_file" "jaeger_server_bootstrap" {
+
+  template = "${file("../util/jaeger-server.sh")}"
+
+  vars {
+
+    jaeger_tracing_location = "${var.jaeger_tracing_location}"
+
+  }
+
+}
+
+###########################################
 ######## Bastion Server Bootstrap #########
 ###########################################
 
