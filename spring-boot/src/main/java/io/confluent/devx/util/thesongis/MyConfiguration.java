@@ -23,6 +23,7 @@ import io.jaegertracing.Configuration.SamplerConfiguration;
 import io.opentracing.Tracer;
 import io.opentracing.contrib.kafka.spring.TracingConsumerFactory;
 import io.opentracing.contrib.kafka.spring.TracingProducerFactory;
+import io.opentracing.util.GlobalTracer;
 
 @Configuration
 public class MyConfiguration {
@@ -42,10 +43,16 @@ public class MyConfiguration {
     @Bean
     public Tracer tracer() {
 
-        return new io.jaegertracing.Configuration("Spring Boot")
+        if (!GlobalTracer.isRegistered()) {
+
+            GlobalTracer.register(new io.jaegertracing.Configuration("Spring Boot")
             .withSampler(SamplerConfiguration.fromEnv())
             .withReporter(ReporterConfiguration.fromEnv())
-            .getTracer();
+            .getTracer());
+
+        }
+
+        return GlobalTracer.get();
 
     }
 
