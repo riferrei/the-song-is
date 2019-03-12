@@ -32,6 +32,13 @@ resource "null_resource" "local_config" {
 
     provisioner "local-exec" {
 
+        command = "ccloud topic create CURRENT_SONG --partitions 4 --replication-factor 3"
+        on_failure = "continue"
+
+    }
+
+    provisioner "local-exec" {
+
         command = "ccloud topic create TWEETS --partitions 4 --replication-factor 3"
         on_failure = "continue"
 

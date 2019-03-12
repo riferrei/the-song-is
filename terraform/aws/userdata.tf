@@ -199,6 +199,17 @@ data "template_file" "spring_server_bootstrap" {
 
   template = "${file("../util/spring-server.sh")}"
 
+  vars {
+
+    broker_list = "${var.ccloud_broker_list}"
+    access_key = "${var.ccloud_access_key}"
+    secret_key = "${var.ccloud_secret_key}"
+
+    schema_registry_url = "${join(",", formatlist("http://%s:%s",
+      aws_instance.schema_registry.*.private_ip, "8081"))}"
+
+  }
+
 }
 
 ###########################################

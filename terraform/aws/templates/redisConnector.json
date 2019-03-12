@@ -3,7 +3,7 @@
     "config" : {
       "connector.class" : "com.github.jcustenborder.kafka.connect.redis.RedisSinkConnector",
       "tasks.max" : "1",
-      "topics" : "CURRENT_IDENTITY_OUTPUT",
+      "topics" : "WINNERS",
       "redis.hosts" : "${redis_hosts}",
       "key.converter" : "org.apache.kafka.connect.converters.ByteArrayConverter",
       "value.converter" : "org.apache.kafka.connect.converters.ByteArrayConverter"
