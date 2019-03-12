@@ -9,6 +9,21 @@ yum install java-1.8.0-openjdk-devel.x86_64 -y
 yum install git -y
 yum install maven -y
 
+############ Jaeger Tracing #############
+
+cd /tmp
+wget ${jaeger_tracing_location}
+tar -xvzf jaeger-1.10.0-linux-amd64.tar.gz
+mkdir /etc/jaeger
+mv jaeger-1.10.0-linux-amd64 /etc/jaeger
+
+cat > /etc/jaeger/jaeger-1.10.0-linux-amd64/jaeger-agent.yaml <<- "EOF"
+reporter:
+  type: tchannel
+  tchannel:
+    host-port: ${jaeger_collector}
+EOF
+
 ######## SpringBoot Application ########
 
 cd /tmp
@@ -36,6 +51,21 @@ chmod 775 /etc/the-song-is/start.sh
 
 ########### Creating the Service ############
 
+cat > /lib/systemd/system/jaeger-agent.service <<- "EOF"
+[Unit]
+Description=Jaeger Agent
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=/etc/jaeger/jaeger-1.10.0-linux-amd64/jaeger-agent --config-file=/etc/jaeger/jaeger-1.10.0-linux-amd64/jaeger-agent.yaml
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
 cat > /lib/systemd/system/spring-server.service <<- "EOF"
 [Unit]
 Description=SpringBoot Application
@@ -52,6 +82,9 @@ WantedBy=multi-user.target
 EOF
 
 ########### Enable and Start ###########
+
+systemctl enable jaeger-agent
+systemctl start jaeger-agent
 
 systemctl enable spring-server
 systemctl start spring-server

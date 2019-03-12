@@ -100,6 +100,10 @@ data "template_file" "kafka_connect_bootstrap" {
 
   vars {
 
+    jaeger_tracing_location = "${var.jaeger_tracing_location}"
+    jaeger_collector = "${join(",", formatlist("%s:%s",
+      aws_instance.jaeger_server.*.private_ip, "14267"))}"
+
     confluent_platform_location = "${var.confluent_platform_location}"
     kafka_connect_properties = "${data.template_file.kafka_connect_properties.rendered}"
     confluent_home_value = "${var.confluent_home_value}"
@@ -136,6 +140,10 @@ data "template_file" "ksql_server_bootstrap" {
   template = "${file("../util/ksql-server.sh")}"
 
   vars {
+
+    jaeger_tracing_location = "${var.jaeger_tracing_location}"
+    jaeger_collector = "${join(",", formatlist("%s:%s",
+      aws_instance.jaeger_server.*.private_ip, "14267"))}"
 
     confluent_platform_location = "${var.confluent_platform_location}"
     ksql_server_properties = "${data.template_file.ksql_server_properties.rendered}"
@@ -200,6 +208,10 @@ data "template_file" "spring_server_bootstrap" {
   template = "${file("../util/spring-server.sh")}"
 
   vars {
+
+    jaeger_tracing_location = "${var.jaeger_tracing_location}"
+    jaeger_collector = "${join(",", formatlist("%s:%s",
+      aws_instance.jaeger_server.*.private_ip, "14267"))}"
 
     broker_list = "${var.ccloud_broker_list}"
     access_key = "${var.ccloud_access_key}"
