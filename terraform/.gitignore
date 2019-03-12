@@ -1,0 +1,11 @@
+aws/initialize.sh
+aws/cloud.auto.tfvars
+aws/ccloud.auto.tfvars
+aws/alexa.skill.auto.tfvars
+aws/twitter.conn.auto.tfvars
+aws/twitterConnector.json
+aws/redisConnector.json
+aws/.terraform/**/*.*
+aws/terraform.tfstate
+aws/terraform.tfstate.backup
+aws/.terraform.tfstate.lock.info

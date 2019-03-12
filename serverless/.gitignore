@@ -1,0 +1,16 @@
+*.class
+target
+/bin/
+/.settings/
+.project
+.classpath
+
+# Package Files
+*.jar
+*.war
+*.ear
+
+# Serverless directories
+.serverless
+serverless_original.yml
+serverless.yml
