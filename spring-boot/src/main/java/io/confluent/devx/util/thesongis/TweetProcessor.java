@@ -12,7 +12,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MyConsumer {
+public class TweetProcessor {
 
     private static final String TWEETS = "TWEETS";
     private static final String GUESSES = "GUESSES";
