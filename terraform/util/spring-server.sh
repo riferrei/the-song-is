@@ -29,12 +29,33 @@ EOF
 cd /tmp
 git clone https://github.com/riferrei/the-song-is.git
 cd the-song-is/spring-boot
-mvn clean
 mvn compile
 mvn install
 cd target
 mkdir /etc/the-song-is
 cp the-song-is-spring-boot-1.0.jar /etc/the-song-is
+
+cat > /etc/the-song-is/interceptorsConfig.json <<- "EOF"
+{
+   "services":[
+      {
+         "service":"Spring Boot",
+         "config":{
+            "sampler":{
+               "type" : "const",
+               "param" : 1
+            },
+            "reporter":{
+               "logSpans":true
+            }
+         },
+         "topics":[
+            "TWEETS", "GUESSES"
+         ]
+      }
+   ]
+}
+EOF
 
 cat > /etc/the-song-is/start.sh <<- "EOF"
 #!/bin/bash
