@@ -23,7 +23,6 @@ mkdir ${confluent_home_value}/etc/kafka-connect
 cd /tmp
 git clone https://github.com/riferrei/jaeger-tracing-support.git
 cd jaeger-tracing-support
-mvn clean
 mvn compile
 mvn install
 cd target

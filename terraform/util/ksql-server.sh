@@ -23,7 +23,6 @@ mkdir ${confluent_home_value}/data
 cd /tmp
 git clone https://github.com/riferrei/jaeger-tracing-support.git
 cd jaeger-tracing-support
-mvn clean
 mvn compile
 mvn install
 cd target
