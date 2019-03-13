@@ -71,11 +71,7 @@ cat > interceptorsConfig.json <<- "EOF"
             }
          },
          "topics":[
-            "TWEETS", "GUESSES", "CURRENT_SONG", "WINNERS",
-            "CURRENT_SONG_WRAPPER", "GUESSES_WRAPPER",
-            "CURRENT_SONG_STAGE_1", "CURRENT_SONG_STAGE_2",
-            "SONG", "GUESSES_STAGE_1", "GUESSES_STAGE_2",
-            "GUESSES_STAGE_3", "GUESSES_STAGE_4", "GUESSES_STAGE_5"
+            "TWEETS"
          ]
       }
    ]

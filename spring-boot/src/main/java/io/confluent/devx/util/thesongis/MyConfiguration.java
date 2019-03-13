@@ -20,9 +20,8 @@ import org.springframework.kafka.core.ProducerFactory;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.jaegertracing.Configuration.ReporterConfiguration;
 import io.jaegertracing.Configuration.SamplerConfiguration;
-import io.opentracing.Tracer;
-import io.opentracing.contrib.kafka.spring.TracingConsumerFactory;
-import io.opentracing.contrib.kafka.spring.TracingProducerFactory;
+import io.opentracing.contrib.kafka.TracingConsumerInterceptor;
+import io.opentracing.contrib.kafka.TracingProducerInterceptor;
 import io.opentracing.util.GlobalTracer;
 
 @Configuration
@@ -40,19 +39,12 @@ public class MyConfiguration {
     @Value("${SCHEMA_REGISTRY_URL}")
     private String schemaRegistryUrl;
 
-    @Bean
-    public Tracer tracer() {
+    public MyConfiguration() {
 
-        if (!GlobalTracer.isRegistered()) {
-
-            GlobalTracer.register(new io.jaegertracing.Configuration("Spring Boot")
-            .withSampler(SamplerConfiguration.fromEnv())
-            .withReporter(ReporterConfiguration.fromEnv())
-            .getTracer());
-
-        }
-
-        return GlobalTracer.get();
+        GlobalTracer.register(new io.jaegertracing.Configuration("Spring Boot")
+        .withSampler(SamplerConfiguration.fromEnv())
+        .withReporter(ReporterConfiguration.fromEnv())
+        .getTracer());
 
     }
 
@@ -65,13 +57,14 @@ public class MyConfiguration {
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class.getName());
         config.put(ConsumerConfig.GROUP_ID_CONFIG, "SpringBoot");
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        config.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, TracingConsumerInterceptor.class.getName());
         config.put("schema.registry.url", schemaRegistryUrl);
         config.put("ssl.endpoint.identification.algorithm", "https");
         config.put("sasl.mechanism", "PLAIN");
         config.put("security.protocol", "SASL_SSL");
         config.put("sasl.jaas.config", getJaaSConfig());
 
-        return new TracingConsumerFactory<>(new DefaultKafkaConsumerFactory<>(config), tracer());
+        return new DefaultKafkaConsumerFactory<>(config);
 
     }
 
@@ -83,12 +76,13 @@ public class MyConfiguration {
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        config.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, TracingProducerInterceptor.class.getName());
         config.put("ssl.endpoint.identification.algorithm", "https");
         config.put("sasl.mechanism", "PLAIN");
         config.put("security.protocol", "SASL_SSL");
         config.put("sasl.jaas.config", getJaaSConfig());
 
-        return new TracingProducerFactory<>(new DefaultKafkaProducerFactory<>(config), tracer());
+        return new DefaultKafkaProducerFactory<>(config);
         
     }
 
@@ -117,7 +111,7 @@ public class MyConfiguration {
     @Bean
     public KafkaTemplate<String, String> kafkaTemplate() {
 
-        return new KafkaTemplate<>(producerFactory());
+        return new KafkaTemplate<String, String>(producerFactory());
 
     }
 
