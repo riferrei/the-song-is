@@ -29,6 +29,7 @@ EOF
 cd /tmp
 git clone https://github.com/riferrei/the-song-is.git
 cd the-song-is/spring-boot
+mvn clean
 mvn compile
 mvn install
 cd target
