@@ -23,12 +23,15 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.stereotype.Service;
 
-import io.confluent.devx.util.JaegerTracingConsumerInterceptor;
-import io.confluent.devx.util.JaegerTracingProducerInterceptor;
-import io.confluent.devx.util.JaegerTracingUtils;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
+import io.jaegertracing.Configuration;
+import io.jaegertracing.Configuration.ReporterConfiguration;
+import io.jaegertracing.Configuration.SamplerConfiguration;
 import io.opentracing.SpanContext;
+import io.opentracing.contrib.kafka.TracingConsumerInterceptor;
 import io.opentracing.contrib.kafka.TracingKafkaUtils;
+import io.opentracing.contrib.kafka.TracingProducerInterceptor;
+import io.opentracing.util.GlobalTracer;
 
 @Service
 public class TweetProcessor {
@@ -49,6 +52,15 @@ public class TweetProcessor {
     private String schemaRegistryUrl;
 
     private KafkaProducer<String, String> producer;
+
+    public TweetProcessor() {
+
+        GlobalTracer.register(new Configuration("Spring Boot")
+            .withSampler(SamplerConfiguration.fromEnv())
+            .withReporter(ReporterConfiguration.fromEnv())
+            .getTracer());
+
+    }
 
     @KafkaListener(topics = TWEETS)
     public void consume(ConsumerRecord record) {
@@ -75,10 +87,10 @@ public class TweetProcessor {
 
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class.getName());
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, "SpringBoot");
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, "Spring-Boot");
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        config.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, JaegerTracingConsumerInterceptor.class.getName());
-        config.put(JaegerTracingUtils.CONFIG_FILE_PROP, "/etc/the-song-is/interceptorsConfig.json");
+        config.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, TracingConsumerInterceptor.class.getName());
+        //config.put(JaegerTracingUtils.CONFIG_FILE_PROP, "/etc/the-song-is/interceptorsConfig.json");
         config.put("schema.registry.url", schemaRegistryUrl);
         config.put("ssl.endpoint.identification.algorithm", "https");
         config.put("sasl.mechanism", "PLAIN");
@@ -114,6 +126,7 @@ public class TweetProcessor {
                 new ProducerRecord<String, String>(GUESSES,
                     null, null, value, headers);
 
+            TracingKafkaUtils.buildAndInjectSpan(record, GlobalTracer.get());
             producer.send(record);
 
         }
@@ -147,8 +160,8 @@ public class TweetProcessor {
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        config.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, JaegerTracingProducerInterceptor.class.getName());
-        config.put(JaegerTracingUtils.CONFIG_FILE_PROP, "/etc/the-song-is/interceptorsConfig.json");
+        config.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, TracingProducerInterceptor.class.getName());
+        //config.put(JaegerTracingUtils.CONFIG_FILE_PROP, "/etc/the-song-is/interceptorsConfig.json");
         config.put("ssl.endpoint.identification.algorithm", "https");
         config.put("sasl.mechanism", "PLAIN");
         config.put("security.protocol", "SASL_SSL");
