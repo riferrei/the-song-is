@@ -48,15 +48,7 @@ reporter:
     host-port: ${jaeger_collector}
 EOF
 
-########### Generating Props File ###########
-
-cd ${confluent_home_value}/etc/ksql
-
-cat > ksql-server-ccloud.properties <<- "EOF"
-${ksql_server_properties}
-EOF
-
-cat > interceptorsConfig.json <<- "EOF"
+cat > ${confluent_home_value}/etc/ksql/interceptorsConfig.json <<- "EOF"
 {
    "services":[
       {
@@ -80,6 +72,27 @@ cat > interceptorsConfig.json <<- "EOF"
    ]
 }
 EOF
+
+########### Generating Props File ###########
+
+cd ${confluent_home_value}/etc/ksql
+
+cat > ksql-server-ccloud.properties <<- "EOF"
+${ksql_server_properties}
+EOF
+
+############ Custom Start Script ############
+
+cat > ${confluent_home_value}/bin/startKSQL.sh <<- "EOF"
+#!/bin/bash
+
+export INTERCEPTORS_CONFIG_FILE=${confluent_home_value}/etc/ksql/interceptorsConfig.json
+
+${confluent_home_value}/bin/ksql-server-start ${confluent_home_value}/etc/ksql/ksql-server-ccloud.properties
+
+EOF
+
+chmod 775 ${confluent_home_value}/bin/startKSQL.sh
 
 ########### Creating the Service ############
 
@@ -107,7 +120,7 @@ After=network.target
 Type=simple
 Restart=always
 RestartSec=1
-ExecStart=${confluent_home_value}/bin/ksql-server-start ${confluent_home_value}/etc/ksql/ksql-server-ccloud.properties
+ExecStart=${confluent_home_value}/bin/startKSQL.sh
 ExecStop=${confluent_home_value}/bin/ksql-server-stop ${confluent_home_value}/etc/ksql/ksql-server-ccloud.properties
 
 [Install]

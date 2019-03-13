@@ -48,15 +48,7 @@ reporter:
     host-port: ${jaeger_collector}
 EOF
 
-########### Generating Props File ###########
-
-cd ${confluent_home_value}/etc/kafka-connect
-
-cat > kafka-connect-ccloud.properties <<- "EOF"
-${kafka_connect_properties}
-EOF
-
-cat > interceptorsConfig.json <<- "EOF"
+cat > ${confluent_home_value}/etc/kafka-connect/interceptorsConfig.json <<- "EOF"
 {
    "services":[
       {
@@ -78,10 +70,31 @@ cat > interceptorsConfig.json <<- "EOF"
 }
 EOF
 
+########### Generating Props File ###########
+
+cd ${confluent_home_value}/etc/kafka-connect
+
+cat > kafka-connect-ccloud.properties <<- "EOF"
+${kafka_connect_properties}
+EOF
+
 ######## Twitter & Redis Connectors #########
 
 ${confluent_home_value}/bin/confluent-hub install jcustenborder/kafka-connect-twitter:0.2.32 --component-dir ${confluent_home_value}/share/java --no-prompt
 ${confluent_home_value}/bin/confluent-hub install jcustenborder/kafka-connect-redis:0.0.2.7 --component-dir ${confluent_home_value}/share/java --no-prompt
+
+############ Custom Start Script ############
+
+cat > ${confluent_home_value}/bin/startConnect.sh <<- "EOF"
+#!/bin/bash
+
+export INTERCEPTORS_CONFIG_FILE=${confluent_home_value}/etc/kafka-connect/interceptorsConfig.json
+
+${confluent_home_value}/bin/connect-distributed ${confluent_home_value}/etc/kafka-connect/kafka-connect-ccloud.properties
+
+EOF
+
+chmod 775 ${confluent_home_value}/bin/startConnect.sh
 
 ########### Creating the Service ############
 
@@ -108,7 +121,7 @@ Description=Kafka Connect
 Type=simple
 Restart=always
 RestartSec=1
-ExecStart=${confluent_home_value}/bin/connect-distributed ${confluent_home_value}/etc/kafka-connect/kafka-connect-ccloud.properties
+ExecStart=${confluent_home_value}/bin/startConnect.sh
 
 [Install]
 WantedBy=multi-user.target
