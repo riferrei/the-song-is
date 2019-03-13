@@ -1,4 +1,4 @@
-package io.confluent.demos.currentidentity;
+package io.confluent.demos.thesongis;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
@@ -7,22 +7,24 @@ import static com.amazon.ask.request.Predicates.intentName;
 
 import java.util.Optional;
 
-public class CancelandStopIntentHandler implements RequestHandler {
+public class HelpIntentHandler implements RequestHandler {
 
     @Override
     public boolean canHandle(HandlerInput input) {
 
-        return input.matches(intentName("AMAZON.StopIntent")
-            .or(intentName("AMAZON.CancelIntent")));
+        return input.matches(intentName("AMAZON.HelpIntent"));
 
     }
 
     @Override
     public Optional<Response> handle(HandlerInput input) {
 
+        String speechText = "You can ask who won the game";
+
         return input.getResponseBuilder()
-            .withSpeech("Goodbye")
-            .withSimpleCard("CurrentIdentity", "Goodbye")
+            .withSpeech(speechText)
+            .withSimpleCard("TheSongIs", speechText)
+            .withReprompt(speechText)
             .build();
 
     }

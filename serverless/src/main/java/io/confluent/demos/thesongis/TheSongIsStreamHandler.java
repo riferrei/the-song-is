@@ -1,17 +1,17 @@
-package io.confluent.demos.currentidentity;
+package io.confluent.demos.thesongis;
 
 import com.amazon.ask.Skill;
 import com.amazon.ask.Skills;
 import com.amazon.ask.SkillStreamHandler;
 
-public class CurrentIdentityStreamHandler extends SkillStreamHandler {
+public class TheSongIsStreamHandler extends SkillStreamHandler {
 
 	private static Skill getSkill() {
 
 		return Skills.standard()
 			.addRequestHandlers(
 				new CancelandStopIntentHandler(),
-				new CurrentIdentityIntentHandler(),
+				new TheSongIsIntentHandler(),
 				new HelpIntentHandler(),
 				new LaunchRequestHandler(),
 				new SessionEndedRequestHandler())
@@ -19,7 +19,7 @@ public class CurrentIdentityStreamHandler extends SkillStreamHandler {
 
 	}
 
-	public CurrentIdentityStreamHandler() {
+	public TheSongIsStreamHandler() {
 
 		super(getSkill());
 

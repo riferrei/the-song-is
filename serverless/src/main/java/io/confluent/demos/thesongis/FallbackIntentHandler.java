@@ -1,4 +1,4 @@
-package io.confluent.demos.currentidentity;
+package io.confluent.demos.thesongis;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
@@ -24,7 +24,7 @@ public class FallbackIntentHandler implements RequestHandler {
 
         return input.getResponseBuilder()
                 .withSpeech(speechText)
-                .withSimpleCard("CurrentIdentity", speechText)
+                .withSimpleCard("TheSongIs", speechText)
                 .withReprompt(speechText)
                 .build();
     }

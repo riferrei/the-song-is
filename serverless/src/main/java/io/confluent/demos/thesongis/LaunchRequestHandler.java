@@ -1,4 +1,4 @@
-package io.confluent.demos.currentidentity;
+package io.confluent.demos.thesongis;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
@@ -20,11 +20,11 @@ public class LaunchRequestHandler implements RequestHandler {
     @Override
     public Optional<Response> handle(HandlerInput input) {
 
-        String speechText = "Welcome to the current identity skill. You can ask me for heroes identities but please... <amazon:effect name=\"whispered\">keep down OK?</amazon:effect>";
+        String speechText = "Welcome to the 'The Song Is' skill. Ask me who won the game";
 
         return input.getResponseBuilder()
             .withSpeech(speechText)
-            .withSimpleCard("CurrentIdentity", speechText)
+            .withSimpleCard("TheSongIs", speechText)
             .build();
 
     }
