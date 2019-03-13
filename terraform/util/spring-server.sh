@@ -29,6 +29,7 @@ EOF
 cd /tmp
 git clone https://github.com/riferrei/the-song-is.git
 cd the-song-is/spring-boot
+mvn clean
 mvn compile
 mvn install
 cd target
@@ -39,7 +40,7 @@ cat > /etc/the-song-is/interceptorsConfig.json <<- "EOF"
 {
    "services":[
       {
-         "service":"Spring Boot",
+         "service":"Spring Consumer",
          "config":{
             "sampler":{
                "type" : "const",
@@ -50,7 +51,22 @@ cat > /etc/the-song-is/interceptorsConfig.json <<- "EOF"
             }
          },
          "topics":[
-            "TWEETS", "GUESSES"
+            "TWEETS"
+         ]
+      },
+      {
+         "service":"Spring Producer",
+         "config":{
+            "sampler":{
+               "type" : "const",
+               "param" : 1
+            },
+            "reporter":{
+               "logSpans":true
+            }
+         },
+         "topics":[
+            "GUESSES"
          ]
       }
    ]

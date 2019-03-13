@@ -12,6 +12,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.header.Headers;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +27,8 @@ import io.confluent.devx.util.JaegerTracingConsumerInterceptor;
 import io.confluent.devx.util.JaegerTracingProducerInterceptor;
 import io.confluent.devx.util.JaegerTracingUtils;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
+import io.opentracing.SpanContext;
+import io.opentracing.contrib.kafka.TracingKafkaUtils;
 
 @Service
 public class TweetProcessor {
@@ -59,8 +62,9 @@ public class TweetProcessor {
         JsonObject _user = root.get("User").getAsJsonObject();
         String user = _user.get("Name").getAsString();
         String value = createValueWithGuess(text, user);
+        Headers headers = record.headers();
 
-        sendGuess(value);
+        sendGuess(headers, value);
 
     }
 
@@ -96,7 +100,7 @@ public class TweetProcessor {
 
     }
 
-    private void sendGuess(String value) {
+    private void sendGuess(Headers headers, String value) {
 
         if (value != null) {
 
@@ -107,7 +111,7 @@ public class TweetProcessor {
             }
 
             ProducerRecord<String, String> record =
-                new ProducerRecord<String, String>(GUESSES, value);
+                new ProducerRecord<String, String>(GUESSES, null, null, value, headers);
 
             producer.send(record);
 

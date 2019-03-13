@@ -71,7 +71,7 @@ cat > interceptorsConfig.json <<- "EOF"
             }
          },
          "topics":[
-            "TWEETS"
+            "TWEETS", "WINNERS"
          ]
       }
    ]
