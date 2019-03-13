@@ -4,6 +4,9 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
 import com.amazon.ask.request.Predicates;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import redis.clients.jedis.Jedis;
 
@@ -29,7 +32,7 @@ public class TheSongIsIntentHandler implements RequestHandler {
     @Override
     public Optional<Response> handle(HandlerInput input) {
 
-        String speechText = getSpeechText(selectWinner());
+        String speechText = getSpeechText(selectwinnerJson());
 
         return input.getResponseBuilder()
             .withSpeech(speechText)
@@ -37,7 +40,7 @@ public class TheSongIsIntentHandler implements RequestHandler {
 
     }
 
-    private static String selectWinner() {
+    private static String selectwinnerJson() {
 
         if (!jedis.isConnected()) {
 
@@ -71,32 +74,36 @@ public class TheSongIsIntentHandler implements RequestHandler {
         Date dSelected = candidates.get(0);
         long lSelected = dSelected.getTime();
         String selected = String.valueOf(lSelected);
-        String winner = jedis.get(selected);
+        String winnerJson = jedis.get(selected);
 
-        if (winner != null) {
+        if (winnerJson != null) {
 
-            winner = winner.trim();
+            JsonParser parser = new JsonParser();
+            JsonElement ele = parser.parse(winnerJson);
+            JsonObject root = ele.getAsJsonObject();
+
+            return root.get("USER").getAsString();
 
         }
 
-        return winner;
+        return null;
 
     }
 
-    private static String getSpeechText(String winner) {
+    private static String getSpeechText(String winnerJson) {
 
         final StringBuilder speechText = new StringBuilder();
 
-        if (winner != null) {
+        if (winnerJson != null) {
 
-            speechText.append("The winner is ");
-            speechText.append(winner);
+            speechText.append("The winnerJson is ");
+            speechText.append(winnerJson);
 
             return speechText.toString();
 
         } else {
 
-            speechText.append("There are no winners at this time");
+            speechText.append("There are no winnerJsons at this time");
             
             return speechText.toString();
 
