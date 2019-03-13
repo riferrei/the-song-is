@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -13,9 +14,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.core.ProducerFactory;
 
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.jaegertracing.Configuration.ReporterConfiguration;
@@ -48,6 +46,17 @@ public class MyConfiguration {
 
     }
 
+    private String getJaaSConfig() {
+
+        StringBuilder jaasConfig = new StringBuilder();
+        jaasConfig.append("org.apache.kafka.common.security.plain.PlainLoginModule ");
+        jaasConfig.append("required username=\"").append(accessKey).append("\" ");
+        jaasConfig.append("password=\"").append(accessSecret).append("\"; ");
+
+        return jaasConfig.toString();
+
+    }
+
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
 
@@ -69,7 +78,7 @@ public class MyConfiguration {
     }
 
     @Bean
-    public ProducerFactory<String, String> producerFactory() {
+    public KafkaProducer<String, String> producer() {
 
         Map<String, Object> config = new HashMap<String, Object>();
 
@@ -82,19 +91,8 @@ public class MyConfiguration {
         config.put("security.protocol", "SASL_SSL");
         config.put("sasl.jaas.config", getJaaSConfig());
 
-        return new DefaultKafkaProducerFactory<>(config);
+        return new KafkaProducer<String, String>(config);
         
-    }
-
-    private String getJaaSConfig() {
-
-        StringBuilder jaasConfig = new StringBuilder();
-        jaasConfig.append("org.apache.kafka.common.security.plain.PlainLoginModule ");
-        jaasConfig.append("required username=\"").append(accessKey).append("\" ");
-        jaasConfig.append("password=\"").append(accessSecret).append("\"; ");
-
-        return jaasConfig.toString();
-
     }
 
     @Bean
@@ -105,13 +103,6 @@ public class MyConfiguration {
         factory.setConsumerFactory(consumerFactory());
 
         return factory;
-
-    }
-
-    @Bean
-    public KafkaTemplate<String, String> kafkaTemplate() {
-
-        return new KafkaTemplate<String, String>(producerFactory());
 
     }
 

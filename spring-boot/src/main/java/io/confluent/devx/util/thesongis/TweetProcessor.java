@@ -5,10 +5,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,7 +18,7 @@ public class TweetProcessor {
     private static final String GUESSES = "GUESSES";
 
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaProducer<String, String> producer;
 
     @KafkaListener(topics = TWEETS)
     public void consume(ConsumerRecord record) {
@@ -44,7 +44,7 @@ public class TweetProcessor {
             ProducerRecord<String, String> record =
                 new ProducerRecord<String, String>(GUESSES, value);
 
-            kafkaTemplate.send(record);
+            producer.send(record);
 
         }
 
