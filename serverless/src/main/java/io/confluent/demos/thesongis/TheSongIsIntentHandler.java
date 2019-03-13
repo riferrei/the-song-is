@@ -104,7 +104,7 @@ public class TheSongIsIntentHandler implements RequestHandler {
 
         } else {
 
-            speechText.append("There are no winnerJsons at this time");
+            speechText.append("There are no winners at this time!");
             
             return speechText.toString();
 
