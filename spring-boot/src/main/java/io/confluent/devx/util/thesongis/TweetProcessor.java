@@ -53,6 +53,7 @@ public class TweetProcessor {
     @KafkaListener(topics = TWEETS)
     public void consume(ConsumerRecord record) {
 
+        Headers headers = record.headers();
         String json = record.value().toString();
         JsonParser parser = new JsonParser();
         JsonElement ele = parser.parse(json);
@@ -62,7 +63,6 @@ public class TweetProcessor {
         JsonObject _user = root.get("User").getAsJsonObject();
         String user = _user.get("Name").getAsString();
         String value = createValueWithGuess(text, user);
-        Headers headers = record.headers();
 
         sendGuess(headers, value);
 
@@ -111,7 +111,8 @@ public class TweetProcessor {
             }
 
             ProducerRecord<String, String> record =
-                new ProducerRecord<String, String>(GUESSES, null, null, value, headers);
+                new ProducerRecord<String, String>(GUESSES,
+                    null, null, value, headers);
 
             producer.send(record);
 

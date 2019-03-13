@@ -40,7 +40,7 @@ cat > /etc/the-song-is/interceptorsConfig.json <<- "EOF"
 {
    "services":[
       {
-         "service":"Spring Consumer",
+         "service":"Spring Boot",
          "config":{
             "sampler":{
                "type" : "const",
@@ -51,22 +51,7 @@ cat > /etc/the-song-is/interceptorsConfig.json <<- "EOF"
             }
          },
          "topics":[
-            "TWEETS"
-         ]
-      },
-      {
-         "service":"Spring Producer",
-         "config":{
-            "sampler":{
-               "type" : "const",
-               "param" : 1
-            },
-            "reporter":{
-               "logSpans":true
-            }
-         },
-         "topics":[
-            "GUESSES"
+            "TWEETS", "GUESSES"
          ]
       }
    ]
