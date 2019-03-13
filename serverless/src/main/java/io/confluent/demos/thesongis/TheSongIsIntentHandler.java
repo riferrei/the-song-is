@@ -90,14 +90,15 @@ public class TheSongIsIntentHandler implements RequestHandler {
 
     }
 
-    private static String getSpeechText(String winnerJson) {
+    private static String getSpeechText(String winner) {
 
         final StringBuilder speechText = new StringBuilder();
 
-        if (winnerJson != null) {
+        if (winner != null) {
 
-            speechText.append("The winnerJson is ");
-            speechText.append(winnerJson);
+            speechText.append("<p>The winner is ");
+            speechText.append(winner).append("</p>");
+            speechText.append("Congratulations!");
 
             return speechText.toString();
 
