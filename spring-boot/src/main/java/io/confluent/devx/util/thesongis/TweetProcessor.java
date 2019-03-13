@@ -27,7 +27,6 @@ import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.jaegertracing.Configuration;
 import io.jaegertracing.Configuration.ReporterConfiguration;
 import io.jaegertracing.Configuration.SamplerConfiguration;
-import io.opentracing.SpanContext;
 import io.opentracing.contrib.kafka.TracingConsumerInterceptor;
 import io.opentracing.contrib.kafka.TracingKafkaUtils;
 import io.opentracing.contrib.kafka.TracingProducerInterceptor;
@@ -90,7 +89,6 @@ public class TweetProcessor {
         config.put(ConsumerConfig.GROUP_ID_CONFIG, "Spring-Boot");
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         config.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, TracingConsumerInterceptor.class.getName());
-        //config.put(JaegerTracingUtils.CONFIG_FILE_PROP, "/etc/the-song-is/interceptorsConfig.json");
         config.put("schema.registry.url", schemaRegistryUrl);
         config.put("ssl.endpoint.identification.algorithm", "https");
         config.put("sasl.mechanism", "PLAIN");
@@ -161,7 +159,6 @@ public class TweetProcessor {
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         config.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, TracingProducerInterceptor.class.getName());
-        //config.put(JaegerTracingUtils.CONFIG_FILE_PROP, "/etc/the-song-is/interceptorsConfig.json");
         config.put("ssl.endpoint.identification.algorithm", "https");
         config.put("sasl.mechanism", "PLAIN");
         config.put("security.protocol", "SASL_SSL");
