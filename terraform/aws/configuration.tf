@@ -140,3 +140,68 @@ resource "null_resource" "set_current_song_permissions" {
     }
 
 }
+
+data "template_file" "do_delete_keys_script" {
+
+  template = "${file("templates/doDeleteKeys.sh")}"
+
+  vars {
+
+    redis_host = "${join(",", formatlist("%s", aws_instance.redis_server.*.private_ip))}"
+    redis_port = "6379"
+
+  }
+
+}
+
+resource "local_file" "do_delete_keys_script" {
+
+  content  = "${data.template_file.do_delete_keys_script.rendered}"
+  filename = "doDeleteKeys.sh"
+  
+}
+
+resource "null_resource" "do_delete_keys_permissions" {
+
+    depends_on = ["local_file.do_delete_keys_script"]
+    provisioner "local-exec" {
+
+        command = "chmod 775 doDeleteKeys.sh"
+        interpreter = ["bash", "-c"]
+        on_failure = "continue"
+
+    }
+
+}
+
+data "template_file" "delete_keys_script" {
+
+  template = "${file("templates/deleteKeys.sh")}"
+
+  vars {
+
+    bastion_server = "${join(",", formatlist("%s", aws_instance.bastion_server.*.public_ip))}"
+
+  }
+
+}
+
+resource "local_file" "delete_keys_script" {
+
+  content  = "${data.template_file.delete_keys_script.rendered}"
+  filename = "deleteKeys.sh"
+  
+}
+
+resource "null_resource" "delete_keys_permissions" {
+
+    depends_on = ["local_file.delete_keys_script"]
+    provisioner "local-exec" {
+
+        command = "chmod 775 deleteKeys.sh"
+        interpreter = ["bash", "-c"]
+        on_failure = "continue"
+
+    }
+
+}

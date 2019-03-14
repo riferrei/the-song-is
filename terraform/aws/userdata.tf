@@ -269,12 +269,5 @@ data "template_file" "jaeger_server_bootstrap" {
 data "template_file" "bastion_server_bootstrap" {
 
   template = "${file("../util/bastion-server.sh")}"
-
-  vars {
-
-    redis_host = "${join(",", formatlist("%s", aws_instance.redis_server.*.private_ip))}"
-    redis_port = "6379"
-
-  }
   
 }
