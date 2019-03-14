@@ -59,6 +59,7 @@ data "template_file" "twitter_connector" {
 
   vars {
 
+    filter_keywords = "${var.filter_keywords}"
     twitter_oauth_access_token = "${var.twitter_oauth_access_token}"
     twitter_oauth_access_token_secret = "${var.twitter_oauth_access_token_secret}"
     twitter_oauth_consumer_key = "${var.twitter_oauth_consumer_key}"
@@ -112,4 +113,30 @@ resource "local_file" "initialize_script" {
   content  = "${data.template_file.initialize_script.rendered}"
   filename = "initialize.sh"
   
+}
+
+data "template_file" "set_current_song_script" {
+
+  template = "${file("templates/setCurrentSong.sh")}"
+
+}
+
+resource "local_file" "set_current_song_script" {
+
+  content  = "${data.template_file.set_current_song_script.rendered}"
+  filename = "setCurrentSong.sh"
+  
+}
+
+resource "null_resource" "set_current_song_permissions" {
+
+    depends_on = ["local_file.set_current_song_script"]
+    provisioner "local-exec" {
+
+        command = "chmod 775 setCurrentSong.sh"
+        interpreter = ["bash", "-c"]
+        on_failure = "continue"
+
+    }
+
 }

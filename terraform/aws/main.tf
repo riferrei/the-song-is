@@ -36,6 +36,8 @@ variable "global_prefix" {
 
 variable "alexa_skill_id" {}
 
+
+variable "filter_keywords" {}
 variable "twitter_oauth_access_token" {}
 variable "twitter_oauth_access_token_secret" {}
 variable "twitter_oauth_consumer_key" {}
