@@ -32,7 +32,7 @@ public class TheSongIsIntentHandler implements RequestHandler {
     @Override
     public Optional<Response> handle(HandlerInput input) {
 
-        String speechText = getSpeechText(selectwinnerJson());
+        String speechText = getSpeechText(selectWinner());
 
         return input.getResponseBuilder()
             .withSpeech(speechText)
@@ -40,7 +40,7 @@ public class TheSongIsIntentHandler implements RequestHandler {
 
     }
 
-    private static String selectwinnerJson() {
+    private static String selectWinner() {
 
         if (!jedis.isConnected()) {
 
@@ -69,20 +69,24 @@ public class TheSongIsIntentHandler implements RequestHandler {
 
         }
 
-        Collections.sort(candidates);
+        if (!candidates.isEmpty()) {
 
-        Date dSelected = candidates.get(0);
-        long lSelected = dSelected.getTime();
-        String selected = String.valueOf(lSelected);
-        String winnerJson = jedis.get(selected);
+            Collections.sort(candidates);
 
-        if (winnerJson != null) {
-
-            JsonParser parser = new JsonParser();
-            JsonElement ele = parser.parse(winnerJson);
-            JsonObject root = ele.getAsJsonObject();
-
-            return root.get("USER").getAsString();
+            Date dSelected = candidates.get(0);
+            long lSelected = dSelected.getTime();
+            String selected = String.valueOf(lSelected);
+            String winnerJson = jedis.get(selected);
+    
+            if (winnerJson != null) {
+    
+                JsonParser parser = new JsonParser();
+                JsonElement ele = parser.parse(winnerJson);
+                JsonObject root = ele.getAsJsonObject();
+    
+                return root.get("USER").getAsString();
+    
+            }
 
         }
 
