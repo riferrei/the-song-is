@@ -21,4 +21,7 @@ then
 elif [ $1 -eq 7 ]
 then
   echo '{"name" : "Dragostea Din Tei", "author" : "O-Zone"}' | ccloud produce -t CURRENT_SONG
+elif [ $1 -eq 8 ]
+then
+  echo '{"name" : "Crazy Train", "author" : "Ozzy Osbourne"}' | ccloud produce -t CURRENT_SONG
 fi
