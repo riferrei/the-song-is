@@ -268,12 +268,6 @@ data "template_file" "jaeger_server_bootstrap" {
 
 data "template_file" "bastion_server_bootstrap" {
 
-  template = <<EOT
-
-    #!/bin/bash
-    yum update -y
-    amazon-linux-extras install redis4.0 -y
-
-  EOT
+  template = "${file("../util/bastion-server.sh")}"
   
 }

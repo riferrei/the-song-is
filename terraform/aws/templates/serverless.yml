@@ -1,15 +1,15 @@
-service: current-identity-service
+service: the-song-is-service
 
 provider:
   name: aws
   runtime: java8
 
 package:
-  artifact: target/current-identity-function-1.0.jar
+  artifact: target/the-song-is-function-1.0.jar
 
 functions:
   hello:
-    handler: io.confluent.demos.currentidentity.CurrentIdentityStreamHandler
+    handler: io.confluent.demos.thesongis.TheSongIsStreamHandler
     environment:
       REDIS_HOST: ${redis_host}
       REDIS_PORT: ${redis_port}

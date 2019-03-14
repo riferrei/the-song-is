@@ -1,4 +1,4 @@
-package io.confluent.demos.currentidentity;
+package io.confluent.demos.thesongis;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;

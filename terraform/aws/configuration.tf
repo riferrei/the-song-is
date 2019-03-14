@@ -59,6 +59,7 @@ data "template_file" "twitter_connector" {
 
   vars {
 
+    filter_keywords = "${var.filter_keywords}"
     twitter_oauth_access_token = "${var.twitter_oauth_access_token}"
     twitter_oauth_access_token_secret = "${var.twitter_oauth_access_token_secret}"
     twitter_oauth_consumer_key = "${var.twitter_oauth_consumer_key}"
@@ -112,4 +113,95 @@ resource "local_file" "initialize_script" {
   content  = "${data.template_file.initialize_script.rendered}"
   filename = "initialize.sh"
   
+}
+
+data "template_file" "set_current_song_script" {
+
+  template = "${file("templates/setCurrentSong.sh")}"
+
+}
+
+resource "local_file" "set_current_song_script" {
+
+  content  = "${data.template_file.set_current_song_script.rendered}"
+  filename = "setCurrentSong.sh"
+  
+}
+
+resource "null_resource" "set_current_song_permissions" {
+
+    depends_on = ["local_file.set_current_song_script"]
+    provisioner "local-exec" {
+
+        command = "chmod 775 setCurrentSong.sh"
+        interpreter = ["bash", "-c"]
+        on_failure = "continue"
+
+    }
+
+}
+
+data "template_file" "do_delete_keys_script" {
+
+  template = "${file("templates/doDeleteKeys.sh")}"
+
+  vars {
+
+    redis_host = "${join(",", formatlist("%s", aws_instance.redis_server.*.private_ip))}"
+    redis_port = "6379"
+
+  }
+
+}
+
+resource "local_file" "do_delete_keys_script" {
+
+  content  = "${data.template_file.do_delete_keys_script.rendered}"
+  filename = "doDeleteKeys.sh"
+  
+}
+
+resource "null_resource" "do_delete_keys_permissions" {
+
+    depends_on = ["local_file.do_delete_keys_script"]
+    provisioner "local-exec" {
+
+        command = "chmod 775 doDeleteKeys.sh"
+        interpreter = ["bash", "-c"]
+        on_failure = "continue"
+
+    }
+
+}
+
+data "template_file" "delete_keys_script" {
+
+  template = "${file("templates/deleteKeys.sh")}"
+
+  vars {
+
+    bastion_server = "${join(",", formatlist("%s", aws_instance.bastion_server.*.public_ip))}"
+
+  }
+
+}
+
+resource "local_file" "delete_keys_script" {
+
+  content  = "${data.template_file.delete_keys_script.rendered}"
+  filename = "deleteKeys.sh"
+  
+}
+
+resource "null_resource" "delete_keys_permissions" {
+
+    depends_on = ["local_file.delete_keys_script"]
+    provisioner "local-exec" {
+
+        command = "chmod 775 deleteKeys.sh"
+        interpreter = ["bash", "-c"]
+        on_failure = "continue"
+
+    }
+
 }
