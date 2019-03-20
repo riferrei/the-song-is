@@ -7,7 +7,8 @@ data "template_file" "serverless_configuration" {
     redis_host = "${join(",", formatlist("%s", aws_instance.redis_server.*.private_ip))}"
     redis_port = "6379"
 
-    alexa_skill_id = "${var.alexa_skill_id}"
+    the_song_is_skill_id = "${var.the_song_is_skill_id}"
+    delete_keys_skill_id = "${var.delete_keys_skill_id}"
     
     security_group_id = "${aws_security_group.redis_server.id}"
     private_subnet_0 = "${aws_subnet.private_subnet.0.id}"

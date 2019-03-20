@@ -8,13 +8,27 @@ package:
   artifact: target/the-song-is-function-1.0.jar
 
 functions:
-  hello:
+  theSongIs:
     handler: io.confluent.demos.thesongis.TheSongIsStreamHandler
     environment:
       REDIS_HOST: ${redis_host}
       REDIS_PORT: ${redis_port}
     events:
-      - alexaSkill: ${alexa_skill_id}
+      - alexaSkill: ${the_song_is_skill_id}
+    vpc:
+      securityGroupIds:
+        - ${security_group_id}
+      subnetIds:
+        - ${private_subnet_0}
+        - ${private_subnet_1}
+        - ${private_subnet_2}
+  deleteKeys:
+    handler: io.confluent.demos.thesongis.DeleteKeysStreamHandler
+    environment:
+      REDIS_HOST: ${redis_host}
+      REDIS_PORT: ${redis_port}
+    events:
+      - alexaSkill: ${delete_keys_skill_id}
     vpc:
       securityGroupIds:
         - ${security_group_id}

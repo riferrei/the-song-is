@@ -60,6 +60,8 @@ sls deploy -v
 ############### Song Helper ###############
 ###########################################
 
-mvn clean -f "../../song-helper/pom.xml"
-mvn compile -f "../../song-helper/pom.xml"
-mvn install -f "../../song-helper/pom.xml"
+cd ../song-helper
+
+mvn clean
+mvn compile
+mvn install
