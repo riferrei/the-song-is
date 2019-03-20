@@ -55,3 +55,11 @@ mvn install -f "../../serverless/pom.xml"
 
 cd ../../serverless
 sls deploy -v
+
+###########################################
+############### Song Helper ###############
+###########################################
+
+mvn clean -f "../../song-helper/pom.xml"
+mvn compile -f "../../song-helper/pom.xml"
+mvn install -f "../../song-helper/pom.xml"

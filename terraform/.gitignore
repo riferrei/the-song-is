@@ -3,6 +3,7 @@ aws/initialize.sh
 aws/setCurrentSong.sh
 aws/doDeleteKeys.sh
 aws/deleteKeys.sh
+aws/song-helper.sh
 aws/cloud.auto.tfvars
 aws/ccloud.auto.tfvars
 aws/alexa.skill.auto.tfvars

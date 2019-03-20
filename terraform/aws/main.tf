@@ -35,6 +35,7 @@ variable "global_prefix" {
 }
 
 variable "alexa_skill_id" {}
+variable "alexa_device_id" {}
 
 
 variable "filter_keywords" {}

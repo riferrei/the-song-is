@@ -115,25 +115,34 @@ resource "local_file" "initialize_script" {
   
 }
 
-data "template_file" "set_current_song_script" {
+data "template_file" "song_helper_script" {
 
-  template = "${file("templates/setCurrentSong.sh")}"
+  template = "${file("templates/song-helper.sh")}"
+
+  vars {
+
+    broker_list = "${var.ccloud_broker_list}"
+    access_key = "${var.ccloud_access_key}"
+    secret_key = "${var.ccloud_secret_key}"
+    device_id = "${var.alexa_device_id}"
+
+  }
 
 }
 
-resource "local_file" "set_current_song_script" {
+resource "local_file" "song_helper_script" {
 
-  content  = "${data.template_file.set_current_song_script.rendered}"
-  filename = "setCurrentSong.sh"
+  content  = "${data.template_file.song_helper_script.rendered}"
+  filename = "song-helper.sh"
   
 }
 
-resource "null_resource" "set_current_song_permissions" {
+resource "null_resource" "song_helper_script_permissions" {
 
-    depends_on = ["local_file.set_current_song_script"]
+    depends_on = ["local_file.song_helper_script"]
     provisioner "local-exec" {
 
-        command = "chmod 775 setCurrentSong.sh"
+        command = "chmod 775 song-helper.sh"
         interpreter = ["bash", "-c"]
         on_failure = "continue"
 
