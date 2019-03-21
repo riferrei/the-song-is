@@ -9,6 +9,8 @@ import com.google.gson.JsonParser;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -45,15 +47,13 @@ public class SongHelperUtil {
     @Value("${spotify.refresh.token}")
     private String spotifyRefreshToken;
 
-    @Value("${DEVICE_ID}")
-    private String deviceId;
-
     @Value("${CLIENT_ID}")
     private String clientId;
 
     @Value("${CLIENT_SECRET}")
     private String clientSecret;
 
+    private final Logger logger = LoggerFactory.getLogger(SongHelperUtil.class);
     private final RestTemplate rest = new RestTemplate();
     private final JsonParser parser = new JsonParser();
 
@@ -148,7 +148,7 @@ public class SongHelperUtil {
             JsonObject root = ele.getAsJsonObject();
 
             spotifyAccessToken = root.get("access_token").getAsString();
-            System.out.println("------------> Access Token was Refreshed Successfully !!!");
+            logger.info("The access token has been refreshed successfully!");
 
         }
 
@@ -181,12 +181,7 @@ public class SongHelperUtil {
 
         try {
 
-            StringBuilder endpointUri = new StringBuilder();
-            endpointUri.append(PAUSE_USERS_PLAYBACK_API);
-            endpointUri.append("?device_id=");
-            endpointUri.append(deviceId);
-
-            rest.exchange(endpointUri.toString(),
+            rest.exchange(PAUSE_USERS_PLAYBACK_API,
                 HttpMethod.PUT, request, String.class);
 
         } catch (Exception ex) { ex.printStackTrace(); }

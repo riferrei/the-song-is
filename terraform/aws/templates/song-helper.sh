@@ -4,7 +4,6 @@ export BOOTSTRAP_SERVERS=${broker_list}
 export ACCESS_KEY=${access_key}
 export ACCESS_SECRET=${secret_key}
 
-export DEVICE_ID=${device_id}
 export CLIENT_ID=${client_id}
 export CLIENT_SECRET=${client_secret}
 

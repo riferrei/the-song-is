@@ -125,7 +125,6 @@ data "template_file" "song_helper_script" {
     access_key = "${var.ccloud_access_key}"
     secret_key = "${var.ccloud_secret_key}"
 
-    device_id = "${var.alexa_device_id}"
     client_id = "${var.spotify_client_id}"
     client_secret = "${var.spotify_client_secret}"
 

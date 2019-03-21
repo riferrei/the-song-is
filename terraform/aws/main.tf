@@ -36,7 +36,6 @@ variable "global_prefix" {
 
 variable "the_song_is_skill_id" {}
 variable "delete_keys_skill_id" {}
-variable "alexa_device_id" {}
 variable "spotify_client_id" {}
 variable "spotify_client_secret" {}
 
