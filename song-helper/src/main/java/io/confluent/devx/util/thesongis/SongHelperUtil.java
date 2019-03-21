@@ -56,7 +56,6 @@ public class SongHelperUtil {
     private final Logger logger = LoggerFactory.getLogger(SongHelperUtil.class);
     private final RestTemplate rest = new RestTemplate();
     private final JsonParser parser = new JsonParser();
-
     private String currentSong;
 
     @KafkaListener(topics = CURRENT_SONG)
@@ -69,7 +68,7 @@ public class SongHelperUtil {
 
     }
 
-    @Scheduled(fixedRate = 3000)
+    @Scheduled(fixedRate = 2000)
     public void monitorCurrentSong() {
 
         HttpHeaders headers = new HttpHeaders();
