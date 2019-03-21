@@ -35,6 +35,7 @@ public class SongHelperUtil {
     private static final String WINNERS = "WINNERS";
 
     private static final String SPOTIFY_ACCOUNT_TOKENS = "https://accounts.spotify.com/api/token";
+    private static final String SPOTIFY_PLAYER_DEVICES = "https://api.spotify.com/v1/me/player/devices";
     private static final String CURRENTLY_PLAYING_API = "https://api.spotify.com/v1/me/player/currently-playing";
     private static final String PAUSE_USERS_PLAYBACK_API = "https://api.spotify.com/v1/me/player/pause";
 
@@ -53,9 +54,14 @@ public class SongHelperUtil {
     @Value("${CLIENT_SECRET}")
     private String clientSecret;
 
+    @Value("${DEVICE_NAME}")
+    private String deviceName;
+
     private final Logger logger = LoggerFactory.getLogger(SongHelperUtil.class);
     private final RestTemplate rest = new RestTemplate();
     private final JsonParser parser = new JsonParser();
+
+    private String deviceId;
     private String currentSong;
 
     @KafkaListener(topics = CURRENT_SONG)
@@ -66,6 +72,68 @@ public class SongHelperUtil {
         JsonObject root = ele.getAsJsonObject();
         currentSong = root.get("name").getAsString();
 
+    }
+
+    @Scheduled(fixedRate = 30000)
+    public void monitorDeviceId() {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setBearerAuth(spotifyAccessToken);
+
+        HttpEntity<String> request =
+            new HttpEntity<String>("parameters", headers);
+
+        ResponseEntity<String> response = null;
+
+        try {
+
+            response = rest.exchange(SPOTIFY_PLAYER_DEVICES,
+                HttpMethod.GET, request, String.class);
+
+        } catch (HttpClientErrorException ex) {
+
+            if (ex.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
+                refreshAccessToken();
+            }
+    
+        }
+
+        if (response != null && response.getStatusCode().equals(HttpStatus.OK)) {
+
+            String json = response.getBody();
+            JsonElement ele = parser.parse(json);
+            JsonObject root = ele.getAsJsonObject();
+            JsonArray devices = root.getAsJsonArray("devices");
+
+            if (devices != null && devices.size() > 0) {
+
+                boolean found = false;
+
+                for (int i = 0; i < devices.size(); i++) {
+
+                    JsonObject device = devices.get(i).getAsJsonObject();
+                    String deviceName = device.get("name").getAsString();
+
+                    if (deviceName.equals(this.deviceName)) {
+
+                        deviceId = device.get("id").getAsString();
+                        found = true;
+                        break;
+
+                    }
+
+                }
+
+                if (!found) {
+                    deviceId = null;
+                }
+
+            }
+
+        }
+    
     }
 
     @Scheduled(fixedRate = 2000)
@@ -89,9 +157,7 @@ public class SongHelperUtil {
         } catch (HttpClientErrorException ex) {
 
             if (ex.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
-
                 refreshAccessToken();
-
             }
 
         }
@@ -109,9 +175,7 @@ public class SongHelperUtil {
             String author = artist.get("name").getAsString();
 
             if (currentSong == null || !currentSong.equals(songName)) {
-
                 setCurrentSong(songName, author);
-
             }
 
         }
@@ -180,8 +244,22 @@ public class SongHelperUtil {
 
         try {
 
-            rest.exchange(PAUSE_USERS_PLAYBACK_API,
-                HttpMethod.PUT, request, String.class);
+            if (deviceId != null) {
+
+                StringBuilder endpoint = new StringBuilder();
+                endpoint.append(PAUSE_USERS_PLAYBACK_API);
+                endpoint.append("?device_id=");
+                endpoint.append(deviceId);
+    
+                rest.exchange(endpoint.toString(),
+                    HttpMethod.PUT, request, String.class);
+
+            } else {
+
+                rest.exchange(PAUSE_USERS_PLAYBACK_API,
+                    HttpMethod.PUT, request, String.class);
+
+            }
 
         } catch (Exception ex) { ex.printStackTrace(); }
 

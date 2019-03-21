@@ -38,6 +38,7 @@ variable "the_song_is_skill_id" {}
 variable "delete_keys_skill_id" {}
 variable "spotify_client_id" {}
 variable "spotify_client_secret" {}
+variable "spotify_device_name" {}
 
 variable "filter_keywords" {}
 variable "twitter_oauth_access_token" {}

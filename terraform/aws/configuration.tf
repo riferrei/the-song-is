@@ -127,6 +127,7 @@ data "template_file" "song_helper_script" {
 
     client_id = "${var.spotify_client_id}"
     client_secret = "${var.spotify_client_secret}"
+    device_name = "${var.spotify_device_name}"
 
   }
 
