@@ -4,7 +4,7 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.confluent.demos</groupId>
-  <artifactId>the-song-is-function</artifactId>
+  <artifactId>the-song-is-serverless</artifactId>
   <packaging>jar</packaging>
   <version>1.0</version>
   <name>build</name>

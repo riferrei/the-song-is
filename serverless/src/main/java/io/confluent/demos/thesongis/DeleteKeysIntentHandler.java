@@ -26,7 +26,7 @@ public class DeleteKeysIntentHandler implements RequestHandler {
         deleteKeys();
 
         return input.getResponseBuilder()
-            .withSpeech("All winners has been deleted")
+            .withSpeech("OK... all winners are gone. Ready to play.")
             .build();
 
     }
