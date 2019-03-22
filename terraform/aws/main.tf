@@ -38,6 +38,8 @@ variable "the_song_is_skill_id" {}
 variable "delete_keys_skill_id" {}
 variable "spotify_client_id" {}
 variable "spotify_client_secret" {}
+variable "spotify_access_token" {}
+variable "spotify_refresh_token" {}
 variable "spotify_device_name" {}
 
 variable "filter_keywords" {}

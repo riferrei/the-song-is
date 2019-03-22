@@ -42,17 +42,17 @@ public class SongHelperUtil {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    @Value("${spotify.access.token}")
-    private String spotifyAccessToken;
-
-    @Value("${spotify.refresh.token}")
-    private String spotifyRefreshToken;
-
     @Value("${CLIENT_ID}")
     private String clientId;
 
     @Value("${CLIENT_SECRET}")
     private String clientSecret;
+
+    @Value("${SPOTIFY_ACCESS_TOKEN}")
+    private String spotifyAccessToken;
+
+    @Value("${SPOTIFY_REFRESH_TOKEN}")
+    private String spotifyRefreshToken;
 
     @Value("${DEVICE_NAME}")
     private String deviceName;
