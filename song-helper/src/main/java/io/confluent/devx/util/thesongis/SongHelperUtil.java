@@ -48,11 +48,11 @@ public class SongHelperUtil {
     @Value("${CLIENT_SECRET}")
     private String clientSecret;
 
-    @Value("${SPOTIFY_ACCESS_TOKEN}")
-    private String spotifyAccessToken;
+    @Value("${ACCESS_TOKEN}")
+    private String accessToken;
 
-    @Value("${SPOTIFY_REFRESH_TOKEN}")
-    private String spotifyRefreshToken;
+    @Value("${REFRESH_TOKEN}")
+    private String refreshToken;
 
     @Value("${DEVICE_NAME}")
     private String deviceName;
@@ -80,7 +80,7 @@ public class SongHelperUtil {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        headers.setBearerAuth(spotifyAccessToken);
+        headers.setBearerAuth(accessToken);
 
         HttpEntity<String> request =
             new HttpEntity<String>("parameters", headers);
@@ -142,7 +142,7 @@ public class SongHelperUtil {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        headers.setBearerAuth(spotifyAccessToken);
+        headers.setBearerAuth(accessToken);
 
         HttpEntity<String> request =
             new HttpEntity<String>("parameters", headers);
@@ -190,7 +190,7 @@ public class SongHelperUtil {
 
         MultiValueMap<String, String> values = new LinkedMultiValueMap<String, String>();
         values.add("grant_type", "refresh_token");
-        values.add("refresh_token", spotifyRefreshToken);
+        values.add("refresh_token", refreshToken);
 
         HttpEntity<MultiValueMap<String, String>> request =
             new HttpEntity<MultiValueMap<String, String>>(values, headers);
@@ -210,7 +210,7 @@ public class SongHelperUtil {
             JsonElement ele = parser.parse(json);
             JsonObject root = ele.getAsJsonObject();
 
-            spotifyAccessToken = root.get("access_token").getAsString();
+            accessToken = root.get("access_token").getAsString();
             logger.info("The access token has been refreshed successfully!");
 
         }
@@ -237,7 +237,7 @@ public class SongHelperUtil {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        headers.setBearerAuth(spotifyAccessToken);
+        headers.setBearerAuth(accessToken);
 
         HttpEntity<String> request =
             new HttpEntity<String>("parameters", headers);

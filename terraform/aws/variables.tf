@@ -27,6 +27,7 @@ variable "instance_count" {
     "spring_server"    =  1
     "redis_server"     =  1
     "jaeger_server"    =  1
+    "song-helper"      =  1
 
   }
 
