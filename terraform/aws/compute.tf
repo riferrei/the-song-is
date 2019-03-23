@@ -49,7 +49,7 @@ resource "aws_instance" "schema_registry" {
            ? var.instance_count["schema_registry"] : 1}"
 
   ami = "ami-0922553b7b0369273"
-  instance_type = "t3.2xlarge"
+  instance_type = "t3.xlarge"
   key_name = "${aws_key_pair.generated_key.key_name}"
 
   subnet_id = "${element(aws_subnet.private_subnet.*.id, count.index)}"
@@ -83,7 +83,7 @@ resource "aws_instance" "rest_proxy" {
 
   count = "${var.instance_count["rest_proxy"]}"
   ami = "ami-0922553b7b0369273"
-  instance_type = "t3.2xlarge"
+  instance_type = "t3.xlarge"
   key_name = "${aws_key_pair.generated_key.key_name}"
 
   subnet_id = "${element(aws_subnet.private_subnet.*.id, count.index)}"
@@ -257,7 +257,7 @@ resource "aws_instance" "jaeger_server" {
            ? var.instance_count["jaeger_server"] : 1}"
 
   ami = "ami-0922553b7b0369273"
-  instance_type = "t3.medium"
+  instance_type = "t3.xlarge"
   key_name = "${aws_key_pair.generated_key.key_name}"
 
   subnet_id = "${element(aws_subnet.private_subnet.*.id, count.index)}"
@@ -290,7 +290,7 @@ resource "aws_instance" "spring_server" {
   count = "${var.instance_count["spring_server"]}"
   
   ami = "ami-0922553b7b0369273"
-  instance_type = "t3.2xlarge"
+  instance_type = "t3.xlarge"
   key_name = "${aws_key_pair.generated_key.key_name}"
 
   subnet_id = "${element(aws_subnet.private_subnet.*.id, count.index)}"
@@ -315,6 +315,39 @@ resource "aws_instance" "spring_server" {
 }
 
 ###########################################
+############## Song Helper ################
+###########################################
+
+resource "aws_instance" "song_helper" {
+
+  count = "${var.instance_count["song_helper"]}"
+  
+  ami = "ami-0922553b7b0369273"
+  instance_type = "t3.xlarge"
+  key_name = "${aws_key_pair.generated_key.key_name}"
+
+  subnet_id = "${element(aws_subnet.private_subnet.*.id, count.index)}"
+  vpc_security_group_ids = ["${aws_security_group.song_helper.id}"]
+
+  user_data = "${data.template_file.song_helper_bootstrap.rendered}"
+  
+  ebs_block_device {
+
+    device_name = "/dev/xvdb"
+    volume_type = "gp2"
+    volume_size = 300
+
+  }
+
+  tags {
+
+    Name = "${var.global_prefix}-song-helper-${count.index}"
+
+  }
+
+}
+
+###########################################
 ############# Redis Server ################
 ###########################################
 
@@ -323,7 +356,7 @@ resource "aws_instance" "redis_server" {
   count = "${var.instance_count["redis_server"]}"
   
   ami = "ami-0922553b7b0369273"
-  instance_type = "t3.2xlarge"
+  instance_type = "t3.xlarge"
   key_name = "${aws_key_pair.generated_key.key_name}"
 
   subnet_id = "${element(aws_subnet.private_subnet.*.id, count.index)}"

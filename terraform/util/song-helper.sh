@@ -41,31 +41,16 @@ chmod 775 /etc/song-helper/start.sh
 
 ########### Creating the Service ############
 
-cat > /lib/systemd/system/jaeger-agent.service <<- "EOF"
+cat > /lib/systemd/system/song-helper.service <<- "EOF"
 [Unit]
-Description=Jaeger Agent
+Description=Song Helper Application
 After=network.target
 
 [Service]
 Type=simple
 Restart=always
 RestartSec=1
-ExecStart=/etc/jaeger/jaeger-1.10.0-linux-amd64/jaeger-agent --config-file=/etc/jaeger/jaeger-1.10.0-linux-amd64/jaeger-agent.yaml
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-cat > /lib/systemd/system/spring-server.service <<- "EOF"
-[Unit]
-Description=Spring Boot Application
-After=network.target
-
-[Service]
-Type=simple
-Restart=always
-RestartSec=1
-ExecStart=/etc/the-song-is/start.sh
+ExecStart=/etc/song-helper/start.sh
 
 [Install]
 WantedBy=multi-user.target
@@ -73,8 +58,5 @@ EOF
 
 ########### Enable and Start ###########
 
-systemctl enable jaeger-agent
-systemctl start jaeger-agent
-
-systemctl enable spring-server
-systemctl start spring-server
+systemctl enable song-helper
+systemctl start song-helper

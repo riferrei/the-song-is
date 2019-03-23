@@ -263,6 +263,30 @@ data "template_file" "jaeger_server_bootstrap" {
 }
 
 ###########################################
+########## Song Helper Bootstrap ##########
+###########################################
+
+data "template_file" "song_helper_bootstrap" {
+
+  template = "${file("../util/song-helper.sh")}"
+
+  vars {
+
+    broker_list = "${var.ccloud_broker_list}"
+    access_key = "${var.ccloud_access_key}"
+    secret_key = "${var.ccloud_secret_key}"
+
+    client_id = "${var.spotify_client_id}"
+    client_secret = "${var.spotify_client_secret}"
+    access_token = "${var.spotify_access_token}"
+    refresh_token = "${var.spotify_refresh_token}"
+    device_name = "${var.spotify_device_name}"
+
+  }
+
+}
+
+###########################################
 ######## Bastion Server Bootstrap #########
 ###########################################
 

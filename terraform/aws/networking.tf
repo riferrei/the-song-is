@@ -591,6 +591,40 @@ resource "aws_security_group" "bastion_server" {
 
 }
 
+resource "aws_security_group" "song_helper" {
+
+  count = "${var.instance_count["song_helper"] >= 1 ? 1 : 0}"
+
+  name = "${var.global_prefix}-song_helper"
+  description = "Song Helper"
+  vpc_id = "${aws_vpc.default.id}"
+
+  ingress {
+
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.9.0/24"]
+
+  }
+
+  egress {
+
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    
+  }
+
+    tags {
+
+        Name = "${var.global_prefix}-song_helper"
+
+    }    
+  
+}
+
 resource "aws_security_group" "spring_server" {
 
   count = "${var.instance_count["spring_server"] >= 1 ? 1 : 0}"
