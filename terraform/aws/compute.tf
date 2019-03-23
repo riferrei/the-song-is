@@ -287,6 +287,9 @@ resource "aws_instance" "jaeger_server" {
 
 resource "aws_instance" "spring_server" {
 
+  depends_on = ["aws_subnet.private_subnet",
+                "aws_nat_gateway.default"]
+
   count = "${var.instance_count["spring_server"]}"
   
   ami = "ami-0922553b7b0369273"
@@ -319,6 +322,8 @@ resource "aws_instance" "spring_server" {
 ###########################################
 
 resource "aws_instance" "song_helper" {
+
+  depends_on = ["aws_alb.ksql_server"]
 
   count = "${var.instance_count["song_helper"]}"
   
