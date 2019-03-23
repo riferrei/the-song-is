@@ -115,44 +115,6 @@ resource "local_file" "initialize_script" {
   
 }
 
-data "template_file" "song_helper_script" {
-
-  template = "${file("templates/song-helper.sh")}"
-
-  vars {
-
-    broker_list = "${var.ccloud_broker_list}"
-    access_key = "${var.ccloud_access_key}"
-    secret_key = "${var.ccloud_secret_key}"
-
-    client_id = "${var.spotify_client_id}"
-    client_secret = "${var.spotify_client_secret}"
-    device_name = "${var.spotify_device_name}"
-
-  }
-
-}
-
-resource "local_file" "song_helper_script" {
-
-  content  = "${data.template_file.song_helper_script.rendered}"
-  filename = "song-helper.sh"
-  
-}
-
-resource "null_resource" "song_helper_script_permissions" {
-
-    depends_on = ["local_file.song_helper_script"]
-    provisioner "local-exec" {
-
-        command = "chmod 775 song-helper.sh"
-        interpreter = ["bash", "-c"]
-        on_failure = "continue"
-
-    }
-
-}
-
 data "template_file" "do_delete_keys_script" {
 
   template = "${file("templates/doDeleteKeys.sh")}"
