@@ -51,6 +51,13 @@ resource "null_resource" "local_config" {
 
     }
 
+    provisioner "local-exec" {
+
+        command = "ccloud topic create WINNERS --partitions 4 --replication-factor 3"
+        on_failure = "continue"
+
+    }
+
 }
 
 data "template_file" "twitter_connector" {
