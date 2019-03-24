@@ -3,6 +3,7 @@ service: the-song-is-service
 provider:
   name: aws
   runtime: java8
+  region: us-east-1
 
 package:
   artifact: target/the-song-is-serverless-1.0.jar

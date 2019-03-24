@@ -48,7 +48,7 @@ resource "aws_instance" "schema_registry" {
   count = "${var.instance_count["schema_registry"] >= 1
            ? var.instance_count["schema_registry"] : 1}"
 
-  ami = "ami-0922553b7b0369273"
+  ami = "${var.ec2_ami}"
   instance_type = "t3.xlarge"
   key_name = "${aws_key_pair.generated_key.key_name}"
 
@@ -82,7 +82,7 @@ resource "aws_instance" "rest_proxy" {
   depends_on = ["aws_instance.schema_registry"]
 
   count = "${var.instance_count["rest_proxy"]}"
-  ami = "ami-0922553b7b0369273"
+  ami = "${var.ec2_ami}"
   instance_type = "t3.xlarge"
   key_name = "${aws_key_pair.generated_key.key_name}"
 
@@ -116,7 +116,7 @@ resource "aws_instance" "kafka_connect" {
   depends_on = ["aws_instance.schema_registry"]
 
   count = "${var.instance_count["kafka_connect"]}"
-  ami = "ami-0922553b7b0369273"
+  ami = "${var.ec2_ami}"
   instance_type = "t3.2xlarge"
   key_name = "${aws_key_pair.generated_key.key_name}"
 
@@ -150,7 +150,7 @@ resource "aws_instance" "ksql_server" {
   depends_on = ["aws_instance.schema_registry"]
 
   count = "${var.instance_count["ksql_server"]}"
-  ami = "ami-0922553b7b0369273"
+  ami = "${var.ec2_ami}"
   instance_type = "t3.2xlarge"
   key_name = "${aws_key_pair.generated_key.key_name}"
 
@@ -186,7 +186,7 @@ resource "aws_instance" "control_center" {
                 "aws_instance.kafka_connect"]
 
   count = "${var.instance_count["control_center"]}"
-  ami = "ami-0922553b7b0369273"
+  ami = "${var.ec2_ami}"
   instance_type = "t3.2xlarge"
   key_name = "${aws_key_pair.generated_key.key_name}"
 
@@ -219,7 +219,7 @@ resource "aws_instance" "bastion_server" {
 
   count = "${var.instance_count["bastion_server"] >= 1 ? 1 : 0}"
 
-  ami = "ami-0922553b7b0369273"
+  ami = "${var.ec2_ami}"
   instance_type = "t2.micro"
   key_name = "${aws_key_pair.generated_key.key_name}"
 
@@ -256,7 +256,7 @@ resource "aws_instance" "jaeger_server" {
   count = "${var.instance_count["jaeger_server"] >= 1
            ? var.instance_count["jaeger_server"] : 1}"
 
-  ami = "ami-0922553b7b0369273"
+  ami = "${var.ec2_ami}"
   instance_type = "t3.xlarge"
   key_name = "${aws_key_pair.generated_key.key_name}"
 
@@ -292,7 +292,7 @@ resource "aws_instance" "spring_server" {
 
   count = "${var.instance_count["spring_server"]}"
   
-  ami = "ami-0922553b7b0369273"
+  ami = "${var.ec2_ami}"
   instance_type = "t3.xlarge"
   key_name = "${aws_key_pair.generated_key.key_name}"
 
@@ -327,7 +327,7 @@ resource "aws_instance" "song_helper" {
 
   count = "${var.instance_count["song_helper"]}"
   
-  ami = "ami-0922553b7b0369273"
+  ami = "${var.ec2_ami}"
   instance_type = "t3.xlarge"
   key_name = "${aws_key_pair.generated_key.key_name}"
 
@@ -360,7 +360,7 @@ resource "aws_instance" "redis_server" {
 
   count = "${var.instance_count["redis_server"]}"
   
-  ami = "ami-0922553b7b0369273"
+  ami = "${var.ec2_ami}"
   instance_type = "t3.xlarge"
   key_name = "${aws_key_pair.generated_key.key_name}"
 

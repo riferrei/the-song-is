@@ -12,6 +12,12 @@ variable "aws_availability_zones" {
 
 }
 
+variable "ec2_ami" {
+
+  default = "ami-0922553b7b0369273"
+
+}
+
 variable "instance_count" {
 
   type = "map"
