@@ -228,6 +228,7 @@ public class SongHelperUtil {
                 root.toString());
 
         kafkaTemplate.send(record);
+        currentSong = songName;
 
     }
 
