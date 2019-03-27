@@ -136,7 +136,7 @@ public class SongHelperUtil {
     
     }
 
-    @Scheduled(fixedRate = 2000)
+    @Scheduled(fixedRate = 1000)
     public void monitorCurrentSong() {
 
         HttpHeaders headers = new HttpHeaders();
