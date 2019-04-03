@@ -13,9 +13,9 @@ yum install maven -y
 
 cd /tmp
 wget ${confluent_platform_location}
-unzip confluent-5.1.0-2.11.zip
+unzip confluent-5.2.1-2.12.zip
 mkdir /etc/confluent
-mv confluent-5.1.0 /etc/confluent
+mv confluent-5.2.1 /etc/confluent
 mkdir ${confluent_home_value}/etc/kafka-connect
 
 ############ Jaeger Tracing #############

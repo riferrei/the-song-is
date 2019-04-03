@@ -41,13 +41,13 @@ variable "instance_count" {
 
 variable "confluent_platform_location" {
 
-  default = "http://packages.confluent.io/archive/5.1/confluent-5.1.0-2.11.zip"
+  default = "http://packages.confluent.io/archive/5.2/confluent-5.2.1-2.12.zip"
 
 }
 
 variable "confluent_home_value" {
 
-  default = "/etc/confluent/confluent-5.1.0"
+  default = "/etc/confluent/confluent-5.2.1"
 
 }
 
