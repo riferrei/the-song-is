@@ -24,6 +24,10 @@ variable "ccloud_access_key" {}
 
 variable "ccloud_secret_key" {}
 
+variable "ccloud_schema_registry_url" {}
+
+variable "ccloud_schema_registry_basic_auth" {}
+
 ###########################################
 ################## Others #################
 ###########################################

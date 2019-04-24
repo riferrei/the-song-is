@@ -37,49 +37,13 @@ resource "null_resource" "private_key_permissions" {
 }
 
 ###########################################
-############ Schema Registry ##############
-###########################################
-
-resource "aws_instance" "schema_registry" {
-
-  depends_on = ["aws_subnet.private_subnet",
-                "aws_nat_gateway.default"]
-
-  count = "${var.instance_count["schema_registry"] >= 1
-           ? var.instance_count["schema_registry"] : 1}"
-
-  ami = "${var.ec2_ami}"
-  instance_type = "t3.xlarge"
-  key_name = "${aws_key_pair.generated_key.key_name}"
-
-  subnet_id = "${element(aws_subnet.private_subnet.*.id, count.index)}"
-  vpc_security_group_ids = ["${aws_security_group.schema_registry.id}"]
-
-  user_data = "${data.template_file.schema_registry_bootstrap.rendered}"
-
-  ebs_block_device {
-
-    device_name = "/dev/xvdb"
-    volume_type = "gp2"
-    volume_size = 100
-
-  }
-
-  tags {
-
-    Name = "${var.global_prefix}-schema-registry-${count.index}"
-
-  }
-
-}
-
-###########################################
 ############## REST Proxy #################
 ###########################################
 
 resource "aws_instance" "rest_proxy" {
 
-  depends_on = ["aws_instance.schema_registry"]
+  depends_on = ["aws_subnet.private_subnet",
+                "aws_nat_gateway.default"]
 
   count = "${var.instance_count["rest_proxy"]}"
   ami = "${var.ec2_ami}"
@@ -113,7 +77,8 @@ resource "aws_instance" "rest_proxy" {
 
 resource "aws_instance" "kafka_connect" {
 
-  depends_on = ["aws_instance.schema_registry"]
+  depends_on = ["aws_subnet.private_subnet",
+                "aws_nat_gateway.default"]
 
   count = "${var.instance_count["kafka_connect"]}"
   ami = "${var.ec2_ami}"
@@ -147,7 +112,8 @@ resource "aws_instance" "kafka_connect" {
 
 resource "aws_instance" "ksql_server" {
 
-  depends_on = ["aws_instance.schema_registry"]
+  depends_on = ["aws_subnet.private_subnet",
+                "aws_nat_gateway.default"]
 
   count = "${var.instance_count["ksql_server"]}"
   ami = "${var.ec2_ami}"
@@ -181,8 +147,7 @@ resource "aws_instance" "ksql_server" {
 
 resource "aws_instance" "control_center" {
 
-  depends_on = ["aws_instance.schema_registry",
-                "aws_instance.ksql_server",
+  depends_on = ["aws_instance.ksql_server",
                 "aws_instance.kafka_connect"]
 
   count = "${var.instance_count["control_center"]}"
@@ -358,6 +323,9 @@ resource "aws_instance" "song_helper" {
 
 resource "aws_instance" "redis_server" {
 
+  depends_on = ["aws_subnet.private_subnet",
+                "aws_nat_gateway.default"]
+
   count = "${var.instance_count["redis_server"]}"
   
   ami = "${var.ec2_ami}"
@@ -380,73 +348,6 @@ resource "aws_instance" "redis_server" {
   tags {
 
     Name = "${var.global_prefix}-redis-server-${count.index}"
-
-  }
-
-}
-
-###########################################
-########## Schema Registry LBR ############
-###########################################
-
-resource "aws_alb_target_group" "schema_registry_target_group" {
-
-  name = "${var.global_prefix}-sr-target-group"
-  port = "8081"
-  protocol = "HTTP"
-  vpc_id = "${aws_vpc.default.id}"
-
-  health_check {    
-
-    healthy_threshold = 3    
-    unhealthy_threshold = 3    
-    timeout = 3   
-    interval = 5    
-    path = "/"
-    port = "8081"
-
-  }
-
-}
-
-resource "aws_alb_target_group_attachment" "schema_registry_attachment" {
-
-  count = "${var.instance_count["schema_registry"] >= 1
-           ? var.instance_count["schema_registry"] : 1}"
-
-  target_group_arn = "${aws_alb_target_group.schema_registry_target_group.arn}"
-  target_id = "${element(aws_instance.schema_registry.*.id, count.index)}"
-  port = 8081
-
-}
-
-resource "aws_alb" "schema_registry" {
-
-  depends_on = ["aws_instance.schema_registry"]
-
-  name = "${var.global_prefix}-schema-registry"
-  subnets = ["${aws_subnet.public_subnet_1.id}", "${aws_subnet.public_subnet_2.id}"]
-  security_groups = ["${aws_security_group.load_balancer.id}"]
-  internal = false
-
-  tags {
-
-    Name = "${var.global_prefix}-schema-registry"
-
-  }
-
-}
-
-resource "aws_alb_listener" "schema_registry_listener" {
-
-  load_balancer_arn = "${aws_alb.schema_registry.arn}"
-  protocol = "HTTP"
-  port = "80"
-  
-  default_action {
-
-    target_group_arn = "${aws_alb_target_group.schema_registry_target_group.arn}"
-    type = "forward"
 
   }
 

@@ -24,7 +24,6 @@ variable "instance_count" {
 
   default = {
 
-    "schema_registry"  =  1
     "rest_proxy"       =  0
     "kafka_connect"    =  1
     "ksql_server"      =  1

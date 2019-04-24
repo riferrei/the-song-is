@@ -2,12 +2,6 @@
 ################# Outputs #################
 ###########################################
 
-output "Schema Registry              " {
-
-  value = "${join(",", formatlist("http://%s", aws_alb.schema_registry.*.dns_name))}"
-
-}
-
 output "Kafka Connect                " {
 
   value = "${var.instance_count["kafka_connect"] >= 1

@@ -39,6 +39,9 @@ public class MyConfiguration {
     @Value("${SCHEMA_REGISTRY_URL}")
     private String schemaRegistryUrl;
 
+    @Value("${SCHEMA_REGISTRY_BASIC_AUTH}")
+    private String schemaRegistryBasicAuth;
+
     public MyConfiguration() {
 
         GlobalTracer.register(new io.jaegertracing.Configuration("Spring Boot")
@@ -59,6 +62,8 @@ public class MyConfiguration {
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         config.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, TracingConsumerInterceptor.class.getName());
         config.put("schema.registry.url", schemaRegistryUrl);
+        config.put("basic.auth.credentials.source", "USER_INFO");
+        config.put("schema.registry.basic.auth.user.info", schemaRegistryBasicAuth);
         config.put("ssl.endpoint.identification.algorithm", "https");
         config.put("sasl.mechanism", "PLAIN");
         config.put("security.protocol", "SASL_SSL");

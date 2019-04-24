@@ -43,6 +43,7 @@ export BOOTSTRAP_SERVERS=${broker_list}
 export ACCESS_KEY=${access_key}
 export ACCESS_SECRET=${secret_key}
 export SCHEMA_REGISTRY_URL=${schema_registry_url}
+export SCHEMA_REGISTRY_BASIC_AUTH=${schema_registry_basic_auth}
 
 java -jar /etc/the-song-is/the-song-is-spring-boot-1.0.jar
 EOF
