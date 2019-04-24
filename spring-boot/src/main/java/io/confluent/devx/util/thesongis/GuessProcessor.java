@@ -16,7 +16,7 @@ import io.opentracing.contrib.kafka.TracingKafkaUtils;
 import io.opentracing.util.GlobalTracer;
 
 @Service
-public class TweetProcessor {
+public class GuessProcessor {
 
     private static final String INPUTS = "INPUTS";
     private static final String GUESSES = "GUESSES";
@@ -32,11 +32,9 @@ public class TweetProcessor {
         JsonParser parser = new JsonParser();
         JsonElement ele = parser.parse(json);
         JsonObject root = ele.getAsJsonObject();
+        JsonObject guess = root.get("guess").getAsJsonObject();
 
-        String songGuess = root.get("songGuess").getAsString();
-        String userName = root.get("userName").getAsString();
-        String value = createValueWithGuess(songGuess, userName);
-
+        String value = createValueWithGuess(guess);
         sendGuess(headers, value);
 
     }
@@ -56,11 +54,11 @@ public class TweetProcessor {
 
     }
 
-    private String createValueWithGuess(String songGuess, String userName) {
+    private String createValueWithGuess(JsonObject guess) {
 
         JsonObject root = new JsonObject();
-        root.addProperty("guess", songGuess);
-        root.addProperty("user", userName);
+        root.addProperty("guess", guess.get("song").getAsString());
+        root.addProperty("user", guess.get("user").getAsString());
 
         return root.toString();
 
