@@ -2,6 +2,12 @@
 ################# Outputs #################
 ###########################################
 
+output "Guess Application            " {
+
+    value = "http://${aws_s3_bucket.the_song_is.website_endpoint}"
+
+}
+
 output "REST Proxy                   " {
 
   value = "${var.instance_count["rest_proxy"] >= 1

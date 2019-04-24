@@ -1,3 +1,85 @@
+variable "bucket_suffix" {
+
+    default = "riferrei"
+
+}
+
+resource "aws_s3_bucket" "the_song_is" {
+
+    bucket = "the-song-is-${var.bucket_suffix}"
+    acl = "public-read"
+
+    cors_rule {
+
+        allowed_headers = ["*"]
+        allowed_methods = ["GET", "POST"]
+        allowed_origins = ["*"]
+
+    }
+
+    policy = <<EOF
+{
+    "Version": "2008-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::the-song-is-${var.bucket_suffix}/*"
+        }
+    ]
+}
+    EOF
+
+    website {
+
+        index_document = "index.html"
+        error_document = "error.html"
+
+    }
+
+}
+
+data "template_file" "index_html" {
+
+  template = "${file("templates/index.html")}"
+
+  vars {
+
+    rest_proxy_endpoint = "${join(",", formatlist("http://%s", aws_alb.rest_proxy.*.dns_name))}"
+
+  }
+
+}
+
+resource "aws_s3_bucket_object" "index" {
+
+    bucket = "${aws_s3_bucket.the_song_is.bucket}"
+    key = "index.html"
+    content_type = "text/html"
+    content = "${data.template_file.index_html.rendered}"
+  
+}
+
+resource "aws_s3_bucket_object" "error" {
+
+    bucket = "${aws_s3_bucket.the_song_is.bucket}"
+    key = "error.html"
+    content_type = "text/html"
+    source = "./templates/error.html"
+  
+}
+
+resource "aws_s3_bucket_object" "logo" {
+
+    bucket = "${aws_s3_bucket.the_song_is.bucket}"
+    key = "logo.svg"
+    content_type = "image/svg+xml"
+    source = "./templates/logo.svg"
+  
+}
+
 data "template_file" "config_properties" {
 
   template = "${file("templates/config.properties")}"
