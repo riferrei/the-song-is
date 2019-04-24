@@ -61,9 +61,7 @@ cat > ${confluent_home_value}/etc/kafka-connect/interceptorsConfig.json <<- "EOF
                "logSpans":true
             }
          },
-         "topics":[
-            "TWEETS", "WINNERS"
-         ]
+         "topics":["WINNERS"]
       }
    ]
 }
@@ -79,7 +77,6 @@ EOF
 
 ######## Twitter & Redis Connectors #########
 
-${confluent_home_value}/bin/confluent-hub install jcustenborder/kafka-connect-twitter:0.2.32 --component-dir ${confluent_home_value}/share/java --no-prompt
 ${confluent_home_value}/bin/confluent-hub install jcustenborder/kafka-connect-redis:0.0.2.7 --component-dir ${confluent_home_value}/share/java --no-prompt
 
 ############ Custom Start Script ############

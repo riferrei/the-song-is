@@ -17,7 +17,6 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
-import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.jaegertracing.Configuration.ReporterConfiguration;
 import io.jaegertracing.Configuration.SamplerConfiguration;
 import io.opentracing.contrib.kafka.TracingConsumerInterceptor;
@@ -36,12 +35,6 @@ public class MyConfiguration {
     @Value("${ACCESS_SECRET}")
     private String accessSecret;
 
-    @Value("${SCHEMA_REGISTRY_URL}")
-    private String schemaRegistryUrl;
-
-    @Value("${SCHEMA_REGISTRY_BASIC_AUTH}")
-    private String schemaRegistryBasicAuth;
-
     public MyConfiguration() {
 
         GlobalTracer.register(new io.jaegertracing.Configuration("Spring Boot")
@@ -57,13 +50,10 @@ public class MyConfiguration {
         Map<String, Object> config = new HashMap<String, Object>();
 
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class.getName());
+        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         config.put(ConsumerConfig.GROUP_ID_CONFIG, "Spring-Boot");
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         config.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, TracingConsumerInterceptor.class.getName());
-        config.put("schema.registry.url", schemaRegistryUrl);
-        config.put("basic.auth.credentials.source", "USER_INFO");
-        config.put("schema.registry.basic.auth.user.info", schemaRegistryBasicAuth);
         config.put("ssl.endpoint.identification.algorithm", "https");
         config.put("sasl.mechanism", "PLAIN");
         config.put("security.protocol", "SASL_SSL");

@@ -1,9 +1,0 @@
-###########################################
-########### Twitter Connector #############
-###########################################
-
-filter_keywords = "<HASHTAGS_OR_HANDLES>"
-twitter_oauth_access_token = "<ACCESS_TOKEN>"
-twitter_oauth_access_token_secret = "<ACESS_TOKEN_SECRET>"
-twitter_oauth_consumer_key = "<CONSUMER_KEY>"
-twitter_oauth_consumer_secret = "<CONSUMER_SECRET>"

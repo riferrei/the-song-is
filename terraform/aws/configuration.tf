@@ -39,7 +39,7 @@ resource "null_resource" "local_config" {
 
     provisioner "local-exec" {
 
-        command = "ccloud topic create TWEETS --partitions 4 --replication-factor 3"
+        command = "ccloud topic create INPUTS --partitions 4 --replication-factor 3"
         on_failure = "continue"
 
     }
@@ -57,29 +57,6 @@ resource "null_resource" "local_config" {
         on_failure = "continue"
 
     }
-
-}
-
-data "template_file" "twitter_connector" {
-
-  template = "${file("templates/twitterConnector.json")}"
-
-  vars {
-
-    filter_keywords = "${var.filter_keywords}"
-    twitter_oauth_access_token = "${var.twitter_oauth_access_token}"
-    twitter_oauth_access_token_secret = "${var.twitter_oauth_access_token_secret}"
-    twitter_oauth_consumer_key = "${var.twitter_oauth_consumer_key}"
-    twitter_oauth_consumer_secret = "${var.twitter_oauth_consumer_secret}"
-
-  }
-
-}
-
-resource "local_file" "twitter_connector" {
-
-  content  = "${data.template_file.twitter_connector.rendered}"
-  filename = "twitterConnector.json"
 
 }
 

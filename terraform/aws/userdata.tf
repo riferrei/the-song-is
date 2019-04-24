@@ -26,6 +26,10 @@ data "template_file" "rest_proxy_bootstrap" {
 
   vars {
 
+    jaeger_tracing_location = "${var.jaeger_tracing_location}"
+    jaeger_collector = "${join(",", formatlist("%s:%s",
+      aws_instance.jaeger_server.*.private_ip, "14267"))}"
+
     confluent_platform_location = "${var.confluent_platform_location}"
     rest_proxy_properties = "${data.template_file.rest_proxy_properties.rendered}"
     confluent_home_value = "${var.confluent_home_value}"

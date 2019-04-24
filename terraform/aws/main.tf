@@ -45,9 +45,3 @@ variable "spotify_client_secret" {}
 variable "spotify_access_token" {}
 variable "spotify_refresh_token" {}
 variable "spotify_device_name" {}
-
-variable "filter_keywords" {}
-variable "twitter_oauth_access_token" {}
-variable "twitter_oauth_access_token_secret" {}
-variable "twitter_oauth_consumer_key" {}
-variable "twitter_oauth_consumer_secret" {}

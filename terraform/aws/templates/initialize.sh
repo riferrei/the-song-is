@@ -1,18 +1,6 @@
 #!/bin/bash
 
 ###########################################
-########### Twitter Connector #############
-###########################################
-
-CONNECTOR_NAME=$(curl -X GET ${kafka_connect_url}/connectors/myTwitterSourceConnector | jq '.name')
-
-if [ -n "$CONNECTOR_NAME" ]; then
-   curl -X DELETE ${kafka_connect_url}/connectors/myTwitterSourceConnector
-fi
-
-curl -s -X POST -H 'Content-Type: application/json' --data @twitterConnector.json ${kafka_connect_url}/connectors
-
-###########################################
 ############## KSQL Streams ###############
 ###########################################
 

@@ -18,13 +18,13 @@ import io.opentracing.util.GlobalTracer;
 @Service
 public class TweetProcessor {
 
-    private static final String TWEETS = "TWEETS";
+    private static final String INPUTS = "INPUTS";
     private static final String GUESSES = "GUESSES";
 
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    @KafkaListener(topics = TWEETS)
+    @KafkaListener(topics = INPUTS)
     public void consume(ConsumerRecord record) {
 
         Headers headers = record.headers();
@@ -33,10 +33,9 @@ public class TweetProcessor {
         JsonElement ele = parser.parse(json);
         JsonObject root = ele.getAsJsonObject();
 
-        String text = root.get("Text").getAsString();
-        JsonObject _user = root.get("User").getAsJsonObject();
-        String user = _user.get("Name").getAsString();
-        String value = createValueWithGuess(text, user);
+        String songGuess = root.get("songGuess").getAsString();
+        String userName = root.get("userName").getAsString();
+        String value = createValueWithGuess(songGuess, userName);
 
         sendGuess(headers, value);
 
@@ -57,23 +56,13 @@ public class TweetProcessor {
 
     }
 
-    private String createValueWithGuess(String text, String user) {
+    private String createValueWithGuess(String songGuess, String userName) {
 
-        int start = text.indexOf("[");
-        int end = text.indexOf("]");
+        JsonObject root = new JsonObject();
+        root.addProperty("guess", songGuess);
+        root.addProperty("user", userName);
 
-        if (start != -1 && end != -1) {
-
-            String guess = text.substring(++start, end);
-            JsonObject root = new JsonObject();
-            root.addProperty("guess", guess);
-            root.addProperty("user", user);
-
-            return root.toString();
-
-        }
-
-        return null;
+        return root.toString();
 
     }
 
