@@ -94,7 +94,22 @@
       function send() {
 
           var song = document.getElementById('song').value;
+
+          if (song == '') {
+
+              alert('Your song guess cannot be empty');
+              return;
+
+          }
+
           var user = document.getElementById('user').value;
+
+          if (user == '') {
+
+            alert('Your name cannot be empty');
+            return;
+
+          }
           
           var record = {};
           record.guess = {};
