@@ -82,9 +82,9 @@ resource "aws_s3_bucket_object" "error" {
 resource "aws_s3_bucket_object" "logo" {
 
     bucket = "${aws_s3_bucket.the_song_is.bucket}"
-    key = "logo.png"
-    content_type = "image/png"
-    source = "./templates/jeeconf.png"
+    key = "confluent.svg"
+    content_type = "image/svg+xml"
+    source = "./templates/confluent.svg"
 }
 
 data "template_file" "config_properties" {
