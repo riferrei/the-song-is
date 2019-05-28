@@ -16,12 +16,12 @@ variable "instance_count" {
   type = map(string)
 
   default = {
-    "rest_proxy"     = 1
+    "rest_proxy"     = 2
     "kafka_connect"  = 1
-    "ksql_server"    = 1
+    "ksql_server"    = 2
     "control_center" = 0
     "bastion_server" = 1
-    "spring_server"  = 1
+    "spring_server"  = 2
     "redis_server"   = 1
     "jaeger_server"  = 1
     "song_helper"    = 1
