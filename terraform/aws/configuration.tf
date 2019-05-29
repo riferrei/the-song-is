@@ -57,20 +57,22 @@ resource "aws_s3_bucket_object" "error" {
   source = "./templates/error.html"
 }
 
-/*resource "aws_s3_bucket_object" "logo" {
+resource "aws_s3_bucket_object" "logo" {
 
     bucket = "${aws_s3_bucket.the_song_is.bucket}"
-    key = "logo.svg"
+    key = "confluent.svg"
     content_type = "image/svg+xml"
-    source = "./templates/logo.svg"
-}*/
+    source = "./templates/confluent.svg"
+}
 
+/*
 resource "aws_s3_bucket_object" "logo" {
   bucket = aws_s3_bucket.the_song_is.bucket
   key = "jbcnconf.png"
   content_type = "image/png"
   source = "./templates/jbcnconf.png"
 }
+*/
 
 data "template_file" "config_properties" {
   template = file("templates/config.properties")
