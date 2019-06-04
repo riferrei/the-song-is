@@ -15,3 +15,4 @@ ${control_center_addresses} control-center
 EOF
 
 yum update -y
+amazon-linux-extras install redis4.0 -y
