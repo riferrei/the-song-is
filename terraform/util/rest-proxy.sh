@@ -20,26 +20,26 @@ mv confluent-5.2.1 /etc/confluent
 ############ Jaeger Tracing #############
 
 cd /tmp
-git clone https://github.com/riferrei/jaeger-tracing-support.git
-cd jaeger-tracing-support
+git clone https://github.com/riferrei/kafka-tracing-support.git
+cd kafka-tracing-support
 mvn compile
 mvn install
 cd target
-cp jaeger-tracing-support-1.0.jar ${confluent_home_value}/share/java/monitoring-interceptors
+cp kafka-tracing-support-1.0.jar ${confluent_home_value}/share/java/monitoring-interceptors
 
 cd /tmp
-curl -O https://riferrei.net/wp-content/uploads/2019/03/dependencies.zip
+curl -O https://riferrei.net/wp-content/uploads/2019/06/dependencies.zip
 unzip dependencies.zip
 cp *.jar ${confluent_home_value}/share/java/monitoring-interceptors
 cp kafka-run-class kafka-rest-run-class ksql-run-class ${confluent_home_value}/bin
 
 cd /tmp
 wget ${jaeger_tracing_location}
-tar -xvzf jaeger-1.10.0-linux-amd64.tar.gz
+tar -xvzf jaeger-1.12.0-linux-amd64.tar.gz
 mkdir /etc/jaeger
-mv jaeger-1.10.0-linux-amd64 /etc/jaeger
+mv jaeger-1.12.0-linux-amd64 /etc/jaeger
 
-cat > /etc/jaeger/jaeger-1.10.0-linux-amd64/jaeger-agent.yaml <<- "EOF"
+cat > /etc/jaeger/jaeger-1.12.0-linux-amd64/jaeger-agent.yaml <<- "EOF"
 reporter:
   type: tchannel
   tchannel:
@@ -98,7 +98,7 @@ After=network.target
 Type=simple
 Restart=always
 RestartSec=1
-ExecStart=/etc/jaeger/jaeger-1.10.0-linux-amd64/jaeger-agent --config-file=/etc/jaeger/jaeger-1.10.0-linux-amd64/jaeger-agent.yaml
+ExecStart=/etc/jaeger/jaeger-1.12.0-linux-amd64/jaeger-agent --config-file=/etc/jaeger/jaeger-1.12.0-linux-amd64/jaeger-agent.yaml
 
 [Install]
 WantedBy=multi-user.target

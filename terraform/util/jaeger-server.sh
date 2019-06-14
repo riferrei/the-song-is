@@ -9,9 +9,9 @@ yum install wget -y
 
 cd /tmp
 wget ${jaeger_tracing_location}
-tar -xvzf jaeger-1.10.0-linux-amd64.tar.gz
+tar -xvzf jaeger-1.12.0-linux-amd64.tar.gz
 mkdir /etc/jaeger
-mv jaeger-1.10.0-linux-amd64 /etc/jaeger
+mv jaeger-1.12.0-linux-amd64 /etc/jaeger
 
 ########### Creating the Service ############
 
@@ -24,7 +24,7 @@ After=network.target
 Type=simple
 Restart=always
 RestartSec=1
-ExecStart=/etc/jaeger/jaeger-1.10.0-linux-amd64/jaeger-all-in-one
+ExecStart=/etc/jaeger/jaeger-1.12.0-linux-amd64/jaeger-all-in-one
 
 [Install]
 WantedBy=multi-user.target

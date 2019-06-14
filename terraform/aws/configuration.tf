@@ -57,6 +57,7 @@ resource "aws_s3_bucket_object" "error" {
   source = "./templates/error.html"
 }
 
+/*
 resource "aws_s3_bucket_object" "logo" {
 
     bucket = aws_s3_bucket.the_song_is.bucket
@@ -64,15 +65,14 @@ resource "aws_s3_bucket_object" "logo" {
     content_type = "image/svg+xml"
     source = "./templates/confluent.svg"
 }
+*/
 
-/*
 resource "aws_s3_bucket_object" "logo" {
   bucket = aws_s3_bucket.the_song_is.bucket
-  key = "jnation-logo.png"
+  key = "apache-kafka.png"
   content_type = "image/png"
-  source = "./templates/jnation-logo.png"
+  source = "./templates/apache-kafka.png"
 }
-*/
 
 data "template_file" "config_properties" {
   template = file("templates/config.properties")

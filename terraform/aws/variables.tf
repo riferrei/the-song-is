@@ -37,6 +37,5 @@ variable "confluent_home_value" {
 }
 
 variable "jaeger_tracing_location" {
-  default = "https://github.com/jaegertracing/jaeger/releases/download/v1.10.0/jaeger-1.10.0-linux-amd64.tar.gz"
+  default = "https://github.com/jaegertracing/jaeger/releases/download/v1.12.0/jaeger-1.12.0-linux-amd64.tar.gz"
 }
-
