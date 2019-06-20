@@ -39,6 +39,11 @@ cp the-song-is-spring-boot-1.0.jar /etc/the-song-is
 cat > /etc/the-song-is/start.sh <<- "EOF"
 #!/bin/bash
 
+export JAEGER_SERVICE_NAME='Spring Boot'
+export JAEGER_SAMPLER_TYPE=const
+export JAEGER_SAMPLER_PARAM=1
+export JAEGER_REPORTER_LOG_SPANS=true
+
 export BOOTSTRAP_SERVERS=${broker_list}
 export ACCESS_KEY=${access_key}
 export ACCESS_SECRET=${secret_key}

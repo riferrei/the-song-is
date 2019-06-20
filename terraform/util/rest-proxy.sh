@@ -46,31 +46,9 @@ reporter:
     host-port: ${jaeger_collector}
 EOF
 
-cat > ${confluent_home_value}/etc/kafka-rest/interceptorsConfig.json <<- "EOF"
-{
-   "services":[
-      {
-         "service":"REST Proxy",
-         "config":{
-            "sampler":{
-               "type" : "const",
-               "param" : 1
-            },
-            "reporter":{
-               "logSpans":true
-            }
-         },
-         "topics":["INPUTS", "GUESSES"]
-      }
-   ]
-}
-EOF
-
 ########### Generating Props File ###########
 
-cd ${confluent_home_value}/etc/kafka-rest
-
-cat > kafka-rest-ccloud.properties <<- "EOF"
+cat > ${confluent_home_value}/etc/kafka-rest/kafka-rest-ccloud.properties <<- "EOF"
 ${rest_proxy_properties}
 EOF
 
@@ -79,7 +57,10 @@ EOF
 cat > ${confluent_home_value}/bin/startRestProxy.sh <<- "EOF"
 #!/bin/bash
 
-export INTERCEPTORS_CONFIG_FILE=${confluent_home_value}/etc/kafka-rest/interceptorsConfig.json
+export JAEGER_SERVICE_NAME='REST Proxy'
+export JAEGER_SAMPLER_TYPE=const
+export JAEGER_SAMPLER_PARAM=1
+export JAEGER_REPORTER_LOG_SPANS=true
 
 ${confluent_home_value}/bin/kafka-rest-start ${confluent_home_value}/etc/kafka-rest/kafka-rest-ccloud.properties
 

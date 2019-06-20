@@ -47,36 +47,9 @@ reporter:
     host-port: ${jaeger_collector}
 EOF
 
-cat > ${confluent_home_value}/etc/ksql/interceptorsConfig.json <<- "EOF"
-{
-   "services":[
-      {
-         "service":"KSQL Server",
-         "config":{
-            "sampler":{
-               "type" : "const",
-               "param" : 1
-            },
-            "reporter":{
-               "logSpans":true
-            }
-         },
-         "topics":[
-            "GUESSES", "GUESSES_WRAPPER",
-            "GUESSES_STAGE_1", "GUESSES_STAGE_2",
-            "GUESSES_STAGE_3", "GUESSES_STAGE_4",
-            "GUESSES_STAGE_5", "WINNERS"
-         ]
-      }
-   ]
-}
-EOF
-
 ########### Generating Props File ###########
 
-cd ${confluent_home_value}/etc/ksql
-
-cat > ksql-server-ccloud.properties <<- "EOF"
+cat > ${confluent_home_value}/etc/ksql/ksql-server-ccloud.properties <<- "EOF"
 ${ksql_server_properties}
 EOF
 
@@ -85,7 +58,10 @@ EOF
 cat > ${confluent_home_value}/bin/startKSQL.sh <<- "EOF"
 #!/bin/bash
 
-export INTERCEPTORS_CONFIG_FILE=${confluent_home_value}/etc/ksql/interceptorsConfig.json
+export JAEGER_SERVICE_NAME='KSQL Server'
+export JAEGER_SAMPLER_TYPE=const
+export JAEGER_SAMPLER_PARAM=1
+export JAEGER_REPORTER_LOG_SPANS=true
 
 ${confluent_home_value}/bin/ksql-server-start ${confluent_home_value}/etc/ksql/ksql-server-ccloud.properties
 

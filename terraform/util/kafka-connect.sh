@@ -47,31 +47,9 @@ reporter:
     host-port: ${jaeger_collector}
 EOF
 
-cat > ${confluent_home_value}/etc/kafka-connect/interceptorsConfig.json <<- "EOF"
-{
-   "services":[
-      {
-         "service":"Kafka Connect",
-         "config":{
-            "sampler":{
-               "type" : "const",
-               "param" : 1
-            },
-            "reporter":{
-               "logSpans":true
-            }
-         },
-         "topics":["WINNERS"]
-      }
-   ]
-}
-EOF
-
 ########### Generating Props File ###########
 
-cd ${confluent_home_value}/etc/kafka-connect
-
-cat > kafka-connect-ccloud.properties <<- "EOF"
+cat > ${confluent_home_value}/etc/kafka-connect/kafka-connect-ccloud.properties <<- "EOF"
 ${kafka_connect_properties}
 EOF
 
@@ -84,7 +62,10 @@ ${confluent_home_value}/bin/confluent-hub install jcustenborder/kafka-connect-re
 cat > ${confluent_home_value}/bin/startConnect.sh <<- "EOF"
 #!/bin/bash
 
-export INTERCEPTORS_CONFIG_FILE=${confluent_home_value}/etc/kafka-connect/interceptorsConfig.json
+export JAEGER_SERVICE_NAME='Kafka Connect'
+export JAEGER_SAMPLER_TYPE=const
+export JAEGER_SAMPLER_PARAM=1
+export JAEGER_REPORTER_LOG_SPANS=true
 
 ${confluent_home_value}/bin/connect-distributed ${confluent_home_value}/etc/kafka-connect/kafka-connect-ccloud.properties
 

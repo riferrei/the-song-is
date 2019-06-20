@@ -17,11 +17,8 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
-import io.jaegertracing.Configuration.ReporterConfiguration;
-import io.jaegertracing.Configuration.SamplerConfiguration;
 import io.opentracing.contrib.kafka.TracingConsumerInterceptor;
 import io.opentracing.contrib.kafka.TracingProducerInterceptor;
-import io.opentracing.util.GlobalTracer;
 
 @Configuration
 public class MyConfiguration {
@@ -34,15 +31,6 @@ public class MyConfiguration {
 
     @Value("${ACCESS_SECRET}")
     private String accessSecret;
-
-    public MyConfiguration() {
-
-        GlobalTracer.register(new io.jaegertracing.Configuration("Spring Boot")
-            .withSampler(SamplerConfiguration.fromEnv())
-            .withReporter(ReporterConfiguration.fromEnv())
-            .getTracer());
-
-    }
 
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
