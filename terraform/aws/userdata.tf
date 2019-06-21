@@ -227,6 +227,8 @@ data "template_file" "bastion_server_bootstrap" {
     kafka_connect_addresses = join(" ", formatlist("%s", aws_instance.kafka_connect.*.private_ip))
     ksql_server_addresses = join(" ", formatlist("%s", aws_instance.ksql_server.*.private_ip))
     control_center_addresses = join(" ", formatlist("%s", aws_instance.control_center.*.private_ip))
+    spring_server_addresses = join(" ", formatlist("%s", aws_instance.spring_server.*.private_ip))
+    song_helper_addresses = join(" ", formatlist("%s", aws_instance.song_helper.*.private_ip))
   }
 
 }

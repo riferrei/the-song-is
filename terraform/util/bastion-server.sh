@@ -12,6 +12,8 @@ ${rest_proxy_addresses} rest-proxy
 ${kafka_connect_addresses} kafka-connect
 ${ksql_server_addresses} ksql-server
 ${control_center_addresses} control-center
+${spring_server_addresses} spring-server
+${song_helper_addresses} song-helper
 EOF
 
 yum update -y
