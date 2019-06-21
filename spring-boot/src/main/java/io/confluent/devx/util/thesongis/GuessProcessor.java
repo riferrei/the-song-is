@@ -47,7 +47,9 @@ public class GuessProcessor {
                 new ProducerRecord<String, String>(GUESSES,
                     null, null, value, headers);
 
-            TracingKafkaUtils.buildAndInjectSpan(record, GlobalTracer.get());
+            TracingKafkaUtils.buildAndInjectSpan(
+                record, GlobalTracer.get()).finish();
+
             kafkaTemplate.send(record);
 
         }
