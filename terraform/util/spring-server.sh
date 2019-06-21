@@ -9,7 +9,7 @@ yum install java-1.8.0-openjdk-devel.x86_64 -y
 yum install git -y
 yum install maven -y
 
-############ Jaeger Tracing ##############
+############ Jaeger Tracing #############
 
 cd /tmp
 wget ${jaeger_tracing_location}

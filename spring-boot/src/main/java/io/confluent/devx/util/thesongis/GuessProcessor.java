@@ -12,9 +12,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import io.opentracing.contrib.kafka.TracingKafkaUtils;
-import io.opentracing.util.GlobalTracer;
-
 @Service
 public class GuessProcessor {
 
@@ -34,23 +31,13 @@ public class GuessProcessor {
         JsonObject root = ele.getAsJsonObject();
         JsonObject guess = root.get("guess").getAsJsonObject();
 
-        String value = createValueWithGuess(guess);
-        sendGuess(headers, value);
+        String modifiedGuess = createValueWithGuess(guess);
 
-    }
+        if (modifiedGuess != null) {
 
-    private void sendGuess(Headers headers, String value) {
-
-        if (value != null) {
-
-            ProducerRecord<String, String> record =
-                new ProducerRecord<String, String>(GUESSES,
-                    null, null, value, headers);
-
-            //TracingKafkaUtils.buildAndInjectSpan(
-                //record, GlobalTracer.get()).finish();
-
-            kafkaTemplate.send(record);
+            kafkaTemplate.send(
+                new ProducerRecord<String, String>(
+                    GUESSES, null, null, modifiedGuess, headers));
 
         }
 
