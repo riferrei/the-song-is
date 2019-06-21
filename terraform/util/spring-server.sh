@@ -1,6 +1,6 @@
 #!/bin/bash
 
-########### Update and Install ###########
+########### Update and Install ##########
 
 yum update -y
 yum install wget -y
