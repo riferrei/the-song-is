@@ -16,6 +16,9 @@ functions:
       REDIS_PORT: ${redis_port}
     events:
       - alexaSkill: ${the_song_is_skill_id}
+      - schedule:
+          rate: rate(5 minutes)
+          input: '${the_song_is_intent}'
     vpc:
       securityGroupIds:
         - ${security_group_id}
@@ -30,6 +33,9 @@ functions:
       REDIS_PORT: ${redis_port}
     events:
       - alexaSkill: ${delete_keys_skill_id}
+      - schedule:
+          rate: rate(5 minutes)
+          input: '${delete_keys_intent}'
     vpc:
       securityGroupIds:
         - ${security_group_id}
