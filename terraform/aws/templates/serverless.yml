@@ -3,6 +3,7 @@ service: the-song-is-service
 provider:
   name: aws
   runtime: java8
+  memorySize: 256
   region: us-east-1
 
 package:
