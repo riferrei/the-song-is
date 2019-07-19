@@ -36,8 +36,7 @@ curl -s -X POST -H 'Content-Type: application/json' --data @redisConnector.json 
 ###########################################
 
 mvn clean -f "../../serverless/pom.xml"
-mvn compile -f "../../serverless/pom.xml"
-mvn install -f "../../serverless/pom.xml"
+mvn package -f "../../serverless/pom.xml"
 
 cd ../../serverless
 sls deploy -v
