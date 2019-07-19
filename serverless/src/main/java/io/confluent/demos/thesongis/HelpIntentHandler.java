@@ -11,9 +11,7 @@ public class HelpIntentHandler implements RequestHandler {
 
     @Override
     public boolean canHandle(HandlerInput input) {
-
         return input.matches(intentName("AMAZON.HelpIntent"));
-
     }
 
     @Override
@@ -26,7 +24,7 @@ public class HelpIntentHandler implements RequestHandler {
             .withSimpleCard("TheSongIs", speechText)
             .withReprompt(speechText)
             .build();
-
+            
     }
 
 }

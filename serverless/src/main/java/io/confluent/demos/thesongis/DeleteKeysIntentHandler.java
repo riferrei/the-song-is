@@ -15,30 +15,21 @@ public class DeleteKeysIntentHandler implements RequestHandler {
 
     @Override
     public boolean canHandle(HandlerInput input) {
-
        return input.matches(Predicates.intentName("DeleteKeysIntent"));
-       
     }
 
     @Override
     public Optional<Response> handle(HandlerInput input) {
-
         deleteKeys();
-
         return input.getResponseBuilder()
             .withSpeech("OK... all winners are gone. Ready to play.")
             .build();
-
     }
 
     private static void deleteKeys() {
-
         if (!jedis.isConnected()) {
-
             jedis.connect();
-
         }
-
         jedis.flushAll();
 
     }
@@ -46,20 +37,15 @@ public class DeleteKeysIntentHandler implements RequestHandler {
     private static Jedis jedis;
 
     static {
-
+        
         jedis = new Jedis(REDIS_HOST, Integer.parseInt(REDIS_PORT));
-
         Runtime.getRuntime().addShutdownHook(new Thread() {
 
             public void run() {
-
                 if (jedis != null) {
-
                     jedis.disconnect();
                     jedis.close();
-
                 }
-
             }
 
         });

@@ -9,9 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class SongHelperApp {
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(SongHelperApp.class, args);
-		
 	}
 
 }

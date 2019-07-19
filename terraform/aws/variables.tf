@@ -29,13 +29,13 @@ variable "instance_count" {
 }
 
 variable "confluent_platform_location" {
-  default = "http://packages.confluent.io/archive/5.2/confluent-5.2.1-2.12.zip"
+  default = "http://packages.confluent.io/archive/5.2/confluent-5.2.2-2.12.zip"
 }
 
 variable "confluent_home_value" {
-  default = "/etc/confluent/confluent-5.2.1"
+  default = "/etc/confluent/confluent-5.2.2"
 }
 
 variable "jaeger_tracing_location" {
-  default = "https://github.com/jaegertracing/jaeger/releases/download/v1.12.0/jaeger-1.12.0-linux-amd64.tar.gz"
+  default = "https://github.com/jaegertracing/jaeger/releases/download/v1.13.0/jaeger-1.13.0-linux-amd64.tar.gz"
 }

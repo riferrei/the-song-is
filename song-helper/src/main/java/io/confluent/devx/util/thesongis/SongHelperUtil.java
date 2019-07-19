@@ -65,13 +65,11 @@ public class SongHelperUtil {
     private String currentSong;
 
     @KafkaListener(topics = CURRENT_SONG)
-    public void updateCurrentSong(ConsumerRecord record) {
-
+    public void updateCurrentSong(ConsumerRecord<String, String> record) {
         String json = record.value().toString();
         JsonElement ele = parser.parse(json);
         JsonObject root = ele.getAsJsonObject();
         currentSong = root.get("name").getAsString();
-
     }
 
     @Scheduled(fixedRate = 30000)
@@ -84,20 +82,15 @@ public class SongHelperUtil {
 
         HttpEntity<String> request =
             new HttpEntity<String>("parameters", headers);
-
         ResponseEntity<String> response = null;
 
         try {
-
             response = rest.exchange(SPOTIFY_PLAYER_DEVICES,
                 HttpMethod.GET, request, String.class);
-
         } catch (HttpClientErrorException ex) {
-
             if (ex.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
                 refreshAccessToken();
             }
-    
         }
 
         if (response != null && response.getStatusCode().equals(HttpStatus.OK)) {
@@ -108,28 +101,19 @@ public class SongHelperUtil {
             JsonArray devices = root.getAsJsonArray("devices");
 
             if (devices != null && devices.size() > 0) {
-
                 boolean found = false;
-
                 for (int i = 0; i < devices.size(); i++) {
-
                     JsonObject device = devices.get(i).getAsJsonObject();
                     String deviceName = device.get("name").getAsString();
-
                     if (deviceName.equals(this.deviceName)) {
-
                         deviceId = device.get("id").getAsString();
                         found = true;
                         break;
-
                     }
-
                 }
-
                 if (!found) {
                     deviceId = null;
                 }
-
             }
 
         }
@@ -146,38 +130,29 @@ public class SongHelperUtil {
 
         HttpEntity<String> request =
             new HttpEntity<String>("parameters", headers);
-
         ResponseEntity<String> response = null;
 
         try {
-
             response = rest.exchange(CURRENTLY_PLAYING_API,
                 HttpMethod.GET, request, String.class);
-
         } catch (HttpClientErrorException ex) {
-
             if (ex.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
                 refreshAccessToken();
             }
-
         }
 
         if (response != null && response.getStatusCode().equals(HttpStatus.OK)) {
-
             String json = response.getBody();
             JsonElement ele = parser.parse(json);
             JsonObject root = ele.getAsJsonObject();
-
             JsonObject item = root.getAsJsonObject("item");
             String songName = item.get("name").getAsString();
             JsonArray artists = item.getAsJsonArray("artists");
             JsonObject artist = artists.get(0).getAsJsonObject();
             String author = artist.get("name").getAsString();
-
             if (currentSong == null || !currentSong.equals(songName)) {
                 setCurrentSong(songName, author);
             }
-
         }
 
     }
@@ -194,25 +169,21 @@ public class SongHelperUtil {
 
         HttpEntity<MultiValueMap<String, String>> request =
             new HttpEntity<MultiValueMap<String, String>>(values, headers);
-
         ResponseEntity<String> response = null;
 
         try {
-
             response = rest.postForEntity(SPOTIFY_ACCOUNT_TOKENS,
                 request, String.class);
-
-        } catch (Exception ex) { ex.printStackTrace(); }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
         if (response != null && response.getStatusCode().equals(HttpStatus.OK)) {
-
             String json = response.getBody();
             JsonElement ele = parser.parse(json);
             JsonObject root = ele.getAsJsonObject();
-
             accessToken = root.get("access_token").getAsString();
             logger.info("The access token has been refreshed successfully!");
-
         }
 
     }
@@ -233,7 +204,7 @@ public class SongHelperUtil {
     }
 
     @KafkaListener(topics = WINNERS)
-    public void stopCurrentSong(ConsumerRecord record) {
+    public void stopCurrentSong(ConsumerRecord<String, String> record) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -244,25 +215,20 @@ public class SongHelperUtil {
             new HttpEntity<String>("parameters", headers);
 
         try {
-
             if (deviceId != null) {
-
                 StringBuilder endpoint = new StringBuilder();
                 endpoint.append(PAUSE_USERS_PLAYBACK_API);
                 endpoint.append("?device_id=");
                 endpoint.append(deviceId);
-    
                 rest.exchange(endpoint.toString(),
                     HttpMethod.PUT, request, String.class);
-
             } else {
-
                 rest.exchange(PAUSE_USERS_PLAYBACK_API,
                     HttpMethod.PUT, request, String.class);
-
             }
-
-        } catch (Exception ex) { ex.printStackTrace(); }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
     }
 

@@ -33,7 +33,6 @@ public class MyConfiguration {
     public ConsumerFactory<String, String> consumerFactory() {
 
         Map<String, Object> config = new HashMap<String, Object>();
-
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         config.put(ConsumerConfig.GROUP_ID_CONFIG, "Song-Helper");
@@ -62,7 +61,6 @@ public class MyConfiguration {
     public ProducerFactory<String, String> producerFactory() {
 
         Map<String, Object> config = new HashMap<String, Object>();
-
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
@@ -77,9 +75,7 @@ public class MyConfiguration {
 
     @Bean
     public KafkaTemplate<String, String> kafkaTemplate() {
-
         return new KafkaTemplate<String, String>(producerFactory());
-
     }    
 
     private String getJaaSConfig() {
@@ -90,7 +86,7 @@ public class MyConfiguration {
         jaasConfig.append("password=\"").append(accessSecret).append("\"; ");
 
         return jaasConfig.toString();
-
+        
     }
 
 }

@@ -22,7 +22,7 @@ public class GuessProcessor {
     private KafkaTemplate<String, String> kafkaTemplate;
 
     @KafkaListener(topics = INPUTS)
-    public void consume(ConsumerRecord record) {
+    public void consume(ConsumerRecord<String, String> record) {
 
         Headers headers = record.headers();
         String json = record.value().toString();
@@ -31,25 +31,16 @@ public class GuessProcessor {
         JsonObject root = ele.getAsJsonObject();
         JsonObject guess = root.get("guess").getAsJsonObject();
 
-        String modifiedGuess = createValueWithGuess(guess);
+        root = new JsonObject();
+        root.addProperty("guess", guess.get("song").getAsString());
+        root.addProperty("user", guess.get("user").getAsString());
+        String modifiedGuess = root.toString();
 
         if (modifiedGuess != null) {
-
             kafkaTemplate.send(
                 new ProducerRecord<String, String>(
                     GUESSES, null, null, modifiedGuess, headers));
-
         }
-
-    }
-
-    private String createValueWithGuess(JsonObject guess) {
-
-        JsonObject root = new JsonObject();
-        root.addProperty("guess", guess.get("song").getAsString());
-        root.addProperty("user", guess.get("user").getAsString());
-
-        return root.toString();
 
     }
 

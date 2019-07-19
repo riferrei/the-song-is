@@ -24,16 +24,14 @@ public class TheSongIsIntentHandler implements RequestHandler {
 
     @Override
     public boolean canHandle(HandlerInput input) {
-
        return input.matches(Predicates.intentName("TheSongIsIntent"));
-       
     }
 
     @Override
     public Optional<Response> handle(HandlerInput input) {
 
         String speechText = getSpeechText(selectWinner());
-
+        
         return input.getResponseBuilder()
             .withSpeech(speechText)
             .build();
@@ -43,49 +41,36 @@ public class TheSongIsIntentHandler implements RequestHandler {
     private static String selectWinner() {
 
         if (!jedis.isConnected()) {
-
             jedis.connect();
-
         }
 
         Set<String> keys = jedis.keys("*");
-
         if (keys == null || keys.isEmpty()) {
-
             return null;
-
         }
 
         List<Date> candidates = new ArrayList<Date>();
 
         for (String key : keys) {
-
             try {
-
                 long tValue = Long.parseLong(key);
                 candidates.add(new Date(tValue));
-
             } catch (NumberFormatException nfe) {}
-
         }
 
         if (!candidates.isEmpty()) {
 
             Collections.sort(candidates);
-
             Date dSelected = candidates.get(0);
             long lSelected = dSelected.getTime();
             String selected = String.valueOf(lSelected);
             String winnerJson = jedis.get(selected);
     
             if (winnerJson != null) {
-    
                 JsonParser parser = new JsonParser();
                 JsonElement ele = parser.parse(winnerJson);
                 JsonObject root = ele.getAsJsonObject();
-    
                 return root.get("USER").getAsString();
-    
             }
 
         }
@@ -99,19 +84,13 @@ public class TheSongIsIntentHandler implements RequestHandler {
         final StringBuilder speechText = new StringBuilder();
 
         if (winner != null) {
-
             speechText.append("<p>The winner is ");
             speechText.append(winner).append("</p>");
             speechText.append("Congratulations!");
-
             return speechText.toString();
-
         } else {
-
             speechText.append("There are no winners at this time!");
-            
             return speechText.toString();
-
         }
 
     }
@@ -121,18 +100,13 @@ public class TheSongIsIntentHandler implements RequestHandler {
     static {
 
         jedis = new Jedis(REDIS_HOST, Integer.parseInt(REDIS_PORT));
-
         Runtime.getRuntime().addShutdownHook(new Thread() {
 
             public void run() {
-
                 if (jedis != null) {
-
                     jedis.disconnect();
                     jedis.close();
-
                 }
-
             }
 
         });

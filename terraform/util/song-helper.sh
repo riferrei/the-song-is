@@ -14,9 +14,7 @@ yum install maven -y
 cd /tmp
 git clone https://github.com/riferrei/the-song-is.git
 cd the-song-is/song-helper
-mvn clean
-mvn compile
-mvn install
+mvn package
 cd target
 mkdir /etc/song-helper
 cp song-helper-spring-boot-1.0.jar /etc/song-helper

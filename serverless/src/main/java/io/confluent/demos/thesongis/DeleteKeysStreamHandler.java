@@ -20,9 +20,7 @@ public class DeleteKeysStreamHandler extends SkillStreamHandler {
 	}
 
 	public DeleteKeysStreamHandler() {
-
 		super(getSkill());
-
 	}
 
 }

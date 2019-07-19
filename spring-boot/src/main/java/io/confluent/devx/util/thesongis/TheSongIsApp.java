@@ -7,9 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TheSongIsApp {
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(TheSongIsApp.class, args);
-		
 	}
 
 }

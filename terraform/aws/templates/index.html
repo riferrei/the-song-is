@@ -96,41 +96,35 @@
           var song = document.getElementById('song').value;
 
           if (song == '') {
-
               alert('Your song guess cannot be empty');
               return;
-
           }
 
           var user = document.getElementById('user').value;
 
           if (user == '') {
-
             alert('Your name cannot be empty');
             return;
-
           }
           
           var record = {};
           record.guess = {};
-
           record.guess.song = song;
           record.guess.user = user;
-          publishEvent(record);
+          produceRecord(record);
 
       }
 
-        function publishEvent(record) {
+        function produceRecord(record) {
 
             var eventData = {};
             eventData.records = [{"value" : {}}];
             eventData.records[0].value = record;
-
             var json = JSON.stringify(eventData);
+
             const request = new XMLHttpRequest();
             const url = "${rest_proxy_endpoint}/topics/INPUTS";
             request.open("POST", url, true);
-
             request.setRequestHeader("Content-Type", "application/vnd.kafka.json.v2+json");
             request.send(json);
 

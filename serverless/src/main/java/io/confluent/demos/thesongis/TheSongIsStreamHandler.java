@@ -20,9 +20,7 @@ public class TheSongIsStreamHandler extends SkillStreamHandler {
 	}
 
 	public TheSongIsStreamHandler() {
-
 		super(getSkill());
-
 	}
 
 }
