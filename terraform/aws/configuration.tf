@@ -151,6 +151,22 @@ resource "local_file" "initialize_script" {
   filename = "initialize.sh"
 }
 
+data "template_file" "terminate_script" {
+  template = file("templates/terminate.sh")
+
+  vars = {
+    kafka_connect_url = join(
+      ",",
+      formatlist("http://%s", aws_alb.kafka_connect.*.dns_name),
+    )
+  }
+}
+
+resource "local_file" "terminate_script" {
+  content = data.template_file.terminate_script.rendered
+  filename = "terminate.sh"
+}
+
 data "template_file" "do_delete_keys_script" {
   template = file("templates/doDeleteKeys.sh")
 

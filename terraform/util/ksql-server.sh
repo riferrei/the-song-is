@@ -13,9 +13,9 @@ yum install maven -y
 
 cd /tmp
 wget ${confluent_platform_location}
-unzip confluent-5.2.2-2.12.zip
+unzip confluent-5.3.0-2.12.zip
 mkdir /etc/confluent
-mv confluent-5.2.2 /etc/confluent
+mv confluent-5.3.0 /etc/confluent
 mkdir ${confluent_home_value}/data
 
 ############ Jaeger Tracing #############
