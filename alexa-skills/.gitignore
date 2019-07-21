@@ -1,3 +1,4 @@
+serverless.yml
 .serverless
 bin
 pkg

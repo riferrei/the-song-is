@@ -1,5 +1,6 @@
 aws/cert.pem
 aws/initialize.sh
+aws/terminate.sh
 aws/setCurrentSong.sh
 aws/doDeleteKeys.sh
 aws/deleteKeys.sh
