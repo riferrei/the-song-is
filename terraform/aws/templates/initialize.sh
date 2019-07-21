@@ -35,8 +35,7 @@ curl -s -X POST -H 'Content-Type: application/json' --data @redisConnector.json 
 ############### Serverless ################
 ###########################################
 
-mvn clean -f "../../serverless/pom.xml"
-mvn package -f "../../serverless/pom.xml"
+cd ../../alexa-skills
+./deploy.sh
 
-cd ../../serverless
-sls deploy -v
+

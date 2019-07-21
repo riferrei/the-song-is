@@ -14,5 +14,5 @@ fi
 ############### Serverless ################
 ###########################################
 
-cd ../../serverless
-sls remove -f
+cd ../../alexa-skills
+./undeploy.sh

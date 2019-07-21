@@ -1,0 +1,11 @@
+.serverless
+bin
+pkg
+vendor
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out

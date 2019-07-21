@@ -1,14 +1,13 @@
-data "template_file" "the_song_is_intent" {
-  template = file("templates/thesongisintent.json")
+data "template_file" "winner_intent" {
+  template = file("templates/winnerintent.json")
 }
 
 data "template_file" "delete_keys_intent" {
   template = file("templates/deletekeysintent.json")
 }
 
-data "template_file" "serverless_configuration" {
-  template = file("templates/serverless.yml")
-
+data "template_file" "serverless" {
+  template = file("../../alexa-skills/serverless.tpl")
   vars = {
     redis_host = join(
       ",",
@@ -21,13 +20,12 @@ data "template_file" "serverless_configuration" {
     private_subnet_0     = aws_subnet.private_subnet[0].id
     private_subnet_1     = aws_subnet.private_subnet[1].id
     private_subnet_2     = aws_subnet.private_subnet[2].id
-    the_song_is_intent   = data.template_file.the_song_is_intent.rendered
+    winner_intent        = data.template_file.winner_intent.rendered
     delete_keys_intent   = data.template_file.delete_keys_intent.rendered
   }
 }
 
-resource "local_file" "serverless_configuration" {
-  content  = data.template_file.serverless_configuration.rendered
-  filename = "../../serverless/serverless.yml"
+resource "local_file" "serverless" {
+  content  = data.template_file.serverless.rendered
+  filename = "../../alexa-skills/serverless.yml"
 }
-
