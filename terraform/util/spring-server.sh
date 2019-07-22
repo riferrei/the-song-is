@@ -32,7 +32,7 @@ cd the-song-is/spring-boot
 mvn package
 cd target
 mkdir /etc/the-song-is
-cp the-song-is-spring-boot-1.0.jar /etc/the-song-is
+cp spring-boot-1.0.jar /etc/the-song-is
 
 cat > /etc/the-song-is/start.sh <<- "EOF"
 #!/bin/bash
@@ -41,7 +41,7 @@ export BOOTSTRAP_SERVERS=${broker_list}
 export ACCESS_KEY=${access_key}
 export ACCESS_SECRET=${secret_key}
 
-java -jar /etc/the-song-is/the-song-is-spring-boot-1.0.jar
+java -jar /etc/the-song-is/spring-boot-1.0.jar
 EOF
 
 chmod 775 /etc/the-song-is/start.sh

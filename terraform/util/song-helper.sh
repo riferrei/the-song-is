@@ -17,7 +17,7 @@ cd the-song-is/song-helper
 mvn package
 cd target
 mkdir /etc/song-helper
-cp song-helper-spring-boot-1.0.jar /etc/song-helper
+cp song-helper-1.0.jar /etc/song-helper
 
 cat > /etc/song-helper/start.sh <<- "EOF"
 #!/bin/bash
@@ -32,7 +32,7 @@ export ACCESS_TOKEN=${access_token}
 export REFRESH_TOKEN=${refresh_token}
 export DEVICE_NAME='${device_name}'
 
-java -jar /etc/song-helper/song-helper-spring-boot-1.0.jar
+java -jar /etc/song-helper/song-helper-1.0.jar
 EOF
 
 chmod 775 /etc/song-helper/start.sh
