@@ -103,7 +103,6 @@ public class SongHelperUtil {
                     JsonObject device = devices.get(i).getAsJsonObject();
                     boolean isActive = device.get("is_active").getAsBoolean();
                     if (isActive) {
-                        System.out.println("---------------> " + device.get("name").getAsString());
                         deviceId = device.get("id").getAsString();
                         deviceNotFound = false;
                         break;
