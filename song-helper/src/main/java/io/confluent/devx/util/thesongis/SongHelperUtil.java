@@ -54,9 +54,6 @@ public class SongHelperUtil {
     @Value("${REFRESH_TOKEN}")
     private String refreshToken;
 
-    @Value("${DEVICE_NAME}")
-    private String deviceName;
-
     private final Logger logger = LoggerFactory.getLogger(SongHelperUtil.class);
     private final RestTemplate rest = new RestTemplate();
     private final JsonParser parser = new JsonParser();
