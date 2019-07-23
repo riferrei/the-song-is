@@ -98,17 +98,22 @@ public class SongHelperUtil {
             JsonArray devices = root.getAsJsonArray("devices");
 
             if (devices != null && devices.size() > 0) {
-                boolean deviceNotFound = true;
+                boolean noDeviceInUse = true;
                 for (int i = 0; i < devices.size(); i++) {
                     JsonObject device = devices.get(i).getAsJsonObject();
                     boolean isActive = device.get("is_active").getAsBoolean();
                     if (isActive) {
-                        deviceId = device.get("id").getAsString();
-                        deviceNotFound = false;
+                        String tmp = device.get("id").getAsString();
+                        if (!tmp.equalsIgnoreCase(deviceId)) {
+                            deviceId = tmp;
+                            logger.info("The current device is active: '" +
+                            device.get("name").getAsString() + "'.'");
+                        }
+                        noDeviceInUse = false;
                         break;
                     }
                 }
-                if (deviceNotFound) {
+                if (noDeviceInUse) {
                     deviceId = null;
                 }
             }
