@@ -18,8 +18,13 @@ func HandleRequest(ctx context.Context, alexaReq shared.AlexaRequest) (shared.Al
 	alexaRes.Response.OutputSpeech.Type = "PlainText"
 	switch alexaReq.Request.Intent.Name {
 	case "DeleteKeysIntent":
-		redisConn.Do("FLUSHALL")
-		alexaRes.Say("OK... all winners are gone. Ready to play.")
+		// This function is executed periodically by the scheduler.
+		// Therefore, we need to make sure to only delete data when
+		// the request in fact came from the user.
+		if alexaReq.Request.Intent.ConfirmationStatus != "PING" {
+			redisConn.Do("FLUSHALL")
+			alexaRes.Say("OK... all winners are gone. Ready to play.")
+		}
 	case "AMAZON.HelpIntent":
 		alexaRes.Say("To use this skill, just say: 'tell the demo to remove all winners.'.")
 	default:
