@@ -106,8 +106,8 @@ public class SongHelperUtil {
                         String tmp = device.get("id").getAsString();
                         if (!tmp.equalsIgnoreCase(deviceId)) {
                             deviceId = tmp;
-                            logger.info("The current device is active: '" +
-                            device.get("name").getAsString() + "'.'");
+                            logger.info("The following device is active: '" +
+                            device.get("name").getAsString() + "'.");
                         }
                         noDeviceInUse = false;
                         break;
