@@ -4,7 +4,6 @@
 
 spotify_client_id = "<CLIENT_ID>"
 spotify_client_secret = "<CLIENT_SECRET>"
-spotify_device_name = "<DEVICE_NAME>"
 
 spotify_access_token = "<ACCESS_TOKEN>"
 spotify_refresh_token = "<REFRESH_TOKEN>"

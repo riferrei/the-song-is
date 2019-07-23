@@ -58,7 +58,3 @@ variable "spotify_access_token" {
 
 variable "spotify_refresh_token" {
 }
-
-variable "spotify_device_name" {
-}
-

@@ -30,7 +30,6 @@ export CLIENT_ID=${client_id}
 export CLIENT_SECRET=${client_secret}
 export ACCESS_TOKEN=${access_token}
 export REFRESH_TOKEN=${refresh_token}
-export DEVICE_NAME='${device_name}'
 
 java -jar /etc/song-helper/song-helper-1.0.jar
 EOF

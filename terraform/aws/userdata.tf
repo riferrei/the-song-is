@@ -4,7 +4,6 @@
 
 data "template_file" "rest_proxy_properties" {
   template = file("../util/rest-proxy.properties")
-
   vars = {
     broker_list                = var.ccloud_broker_list
     access_key                 = var.ccloud_access_key
@@ -17,7 +16,6 @@ data "template_file" "rest_proxy_properties" {
 
 data "template_file" "rest_proxy_bootstrap" {
   template = file("../util/rest-proxy.sh")
-
   vars = {
     jaeger_tracing_location = var.jaeger_tracing_location
     jaeger_collector = join(
@@ -38,7 +36,6 @@ data "template_file" "rest_proxy_bootstrap" {
 
 data "template_file" "kafka_connect_properties" {
   template = file("../util/kafka-connect.properties")
-
   vars = {
     broker_list                = var.ccloud_broker_list
     access_key                 = var.ccloud_access_key
@@ -52,7 +49,6 @@ data "template_file" "kafka_connect_properties" {
 
 data "template_file" "kafka_connect_bootstrap" {
   template = file("../util/kafka-connect.sh")
-
   vars = {
     jaeger_tracing_location = var.jaeger_tracing_location
     jaeger_collector = join(
@@ -71,7 +67,6 @@ data "template_file" "kafka_connect_bootstrap" {
 
 data "template_file" "ksql_server_properties" {
   template = file("../util/ksql-server.properties")
-
   vars = {
     broker_list                = var.ccloud_broker_list
     access_key                 = var.ccloud_access_key
@@ -85,7 +80,6 @@ data "template_file" "ksql_server_properties" {
 
 data "template_file" "ksql_server_bootstrap" {
   template = file("../util/ksql-server.sh")
-
   vars = {
     jaeger_tracing_location = var.jaeger_tracing_location
     jaeger_collector = join(
@@ -104,7 +98,6 @@ data "template_file" "ksql_server_bootstrap" {
 
 data "template_file" "control_center_properties" {
   template = file("../util/control-center.properties")
-
   vars = {
     broker_list                = var.ccloud_broker_list
     access_key                 = var.ccloud_access_key
@@ -138,7 +131,6 @@ data "template_file" "control_center_properties" {
 
 data "template_file" "control_center_bootstrap" {
   template = file("../util/control-center.sh")
-
   vars = {
     confluent_platform_location = var.confluent_platform_location
     control_center_properties   = data.template_file.control_center_properties.rendered
@@ -152,7 +144,6 @@ data "template_file" "control_center_bootstrap" {
 
 data "template_file" "spring_server_bootstrap" {
   template = file("../util/spring-server.sh")
-
   vars = {
     jaeger_tracing_location = var.jaeger_tracing_location
     jaeger_collector = join(
@@ -177,7 +168,6 @@ data "template_file" "redis_config" {
 
 data "template_file" "redis_server_bootstrap" {
   template = file("../util/redis-server.sh")
-
   vars = {
     redis_config = data.template_file.redis_config.rendered
   }
@@ -189,7 +179,6 @@ data "template_file" "redis_server_bootstrap" {
 
 data "template_file" "jaeger_server_bootstrap" {
   template = file("../util/jaeger-server.sh")
-
   vars = {
     jaeger_tracing_location = var.jaeger_tracing_location
   }
@@ -201,7 +190,6 @@ data "template_file" "jaeger_server_bootstrap" {
 
 data "template_file" "song_helper_bootstrap" {
   template = file("../util/song-helper.sh")
-
   vars = {
     broker_list   = var.ccloud_broker_list
     access_key    = var.ccloud_access_key
@@ -210,7 +198,6 @@ data "template_file" "song_helper_bootstrap" {
     client_secret = var.spotify_client_secret
     access_token  = var.spotify_access_token
     refresh_token = var.spotify_refresh_token
-    device_name   = var.spotify_device_name
   }
 }
 
@@ -220,7 +207,6 @@ data "template_file" "song_helper_bootstrap" {
 
 data "template_file" "bastion_server_bootstrap" {
   template = file("../util/bastion-server.sh")
-
   vars = {
     private_key_pem = tls_private_key.key_pair.private_key_pem
     rest_proxy_addresses = join(" ", formatlist("%s", aws_instance.rest_proxy.*.private_ip))

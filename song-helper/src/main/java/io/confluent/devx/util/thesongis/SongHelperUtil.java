@@ -73,7 +73,7 @@ public class SongHelperUtil {
     }
 
     @Scheduled(fixedRate = 30000)
-    public void monitorDeviceId() {
+    public void monitorActiveDevice() {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -101,17 +101,18 @@ public class SongHelperUtil {
             JsonArray devices = root.getAsJsonArray("devices");
 
             if (devices != null && devices.size() > 0) {
-                boolean found = false;
+                boolean deviceNotFound = true;
                 for (int i = 0; i < devices.size(); i++) {
                     JsonObject device = devices.get(i).getAsJsonObject();
-                    String deviceName = device.get("name").getAsString();
-                    if (deviceName.equals(this.deviceName)) {
+                    boolean isActive = device.get("is_active").getAsBoolean();
+                    if (isActive) {
+                        System.out.println("---------------> " + device.get("name").getAsString());
                         deviceId = device.get("id").getAsString();
-                        found = true;
+                        deviceNotFound = false;
                         break;
                     }
                 }
-                if (!found) {
+                if (deviceNotFound) {
                     deviceId = null;
                 }
             }
