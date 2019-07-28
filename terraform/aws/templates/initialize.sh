@@ -30,12 +30,3 @@ if [ -n "$CONNECTOR_NAME" ]; then
 fi
 
 curl -s -X POST -H 'Content-Type: application/json' --data @redisConnector.json ${kafka_connect_url}/connectors
-
-###########################################
-############### Serverless ################
-###########################################
-
-cd ../../alexa-skills
-./deploy.sh
-
-

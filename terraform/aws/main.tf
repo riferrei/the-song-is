@@ -41,7 +41,7 @@ variable "global_prefix" {
   default = "the-song-is"
 }
 
-variable "the_song_is_skill_id" {
+variable "winner_skill_id" {
 }
 
 variable "delete_keys_skill_id" {

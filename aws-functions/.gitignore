@@ -1,5 +1,4 @@
-serverless.yml
-.serverless
+deploy
 bin
 pkg
 vendor
