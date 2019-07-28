@@ -1,30 +1,14 @@
-resource "archive_file" "dummy_file" {
-  type = "zip"
-  source {
-      content = "dummy"
-      filename = "dummy.txt"
-  }
-  output_path = "../../aws-functions/deploy/dummy.zip"
+resource "null_resource" "build_functions" {
   provisioner "local-exec" {
-    command = "GOOS=linux go build -ldflags='-s -w' -o ../../aws-functions/bin/winner ../../aws-functions/src/winner/main.go"
+    command = "sh build.sh"
     interpreter = ["bash", "-c"]
-  }
-  provisioner "local-exec" {
-    command = "GOOS=linux go build -ldflags='-s -w' -o ../../aws-functions/bin/deletekeys ../../aws-functions/src/deletekeys/main.go"
-    interpreter = ["bash", "-c"]
+    working_dir = "../../aws-functions"
   }
 }
 
 ###########################################
 ############ Winner Function ##############
 ###########################################
-
-data "archive_file" "winner_function" {
-    depends_on = ["archive_file.dummy_file"]
-    type = "zip"
-    source_file = "../../aws-functions/bin/winner"
-    output_path = "../../aws-functions/deploy/winner.zip"
-}
 
 resource "aws_iam_role_policy" "winner_policy" {
   role = "${aws_iam_role.winner_role.name}"
@@ -80,10 +64,10 @@ EOF
 }
 
 resource "aws_lambda_function" "winner_function" {
+  depends_on = ["null_resource.build_functions"]
   function_name    = "winner"
   filename         = "../../aws-functions/deploy/winner.zip"
-  source_code_hash = "${filebase64sha256("../../aws-functions/deploy/winner.zip")}"
-  handler          = "winner"
+  handler          = "bin/winner"
   role             = "${aws_iam_role.winner_role.arn}"
   runtime          = "go1.x"
   memory_size      = 128
@@ -140,13 +124,6 @@ data "template_file" "winner_intent" {
 ########## DeleteKeys Function ############
 ###########################################
 
-data "archive_file" "deletekeys_function" {
-    depends_on = ["archive_file.dummy_file"]
-    type = "zip"
-    source_file = "../../aws-functions/bin/deletekeys"
-    output_path = "../../aws-functions/deploy/deletekeys.zip"
-}
-
 resource "aws_iam_role_policy" "deletekeys_policy" {
   role = "${aws_iam_role.deletekeys_role.name}"
   policy = <<POLICY
@@ -201,10 +178,10 @@ EOF
 }
 
 resource "aws_lambda_function" "deletekeys_function" {
+  depends_on = ["null_resource.build_functions"]
   function_name    = "deletekeys"
   filename         = "../../aws-functions/deploy/deletekeys.zip"
-  source_code_hash = "${filebase64sha256("../../aws-functions/deploy/deletekeys.zip")}"
-  handler          = "deletekeys"
+  handler          = "bin/deletekeys"
   role             = "${aws_iam_role.deletekeys_role.arn}"
   runtime          = "go1.x"
   memory_size      = 128
