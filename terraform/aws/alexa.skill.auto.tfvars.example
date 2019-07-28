@@ -2,5 +2,5 @@
 ################# Alexa ###################
 ###########################################
 
-the_song_is_skill_id = "<THE_SONG_IS_SKILL_ID>"
+winner_skill_id = "<THE_SONG_IS_SKILL_ID>"
 delete_keys_skill_id = "<DELETE_KEYS_SKILLS_ID>"
