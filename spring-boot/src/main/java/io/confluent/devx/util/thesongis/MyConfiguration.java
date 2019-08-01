@@ -3,6 +3,7 @@ package io.confluent.devx.util.thesongis;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -14,6 +15,7 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
+import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
@@ -106,6 +108,30 @@ public class MyConfiguration {
 
         return jaasConfig.toString();
 
+    }
+
+    @Bean
+    public KafkaAdmin kafkaAdmin() {
+
+        Map<String, Object> config = new HashMap<String, Object>();
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        config.put("ssl.endpoint.identification.algorithm", "https");
+        config.put("sasl.mechanism", "PLAIN");
+        config.put("security.protocol", "SASL_SSL");
+        config.put("sasl.jaas.config", getJaaSConfig());
+
+        return new KafkaAdmin(config);
+
+    }
+
+    @Bean
+    public NewTopic inputsTopic() {
+        return new NewTopic("INPUTS", 4, (short) 3);
+    }
+
+    @Bean
+    public NewTopic guessesTopic() {
+        return new NewTopic("GUESSES", 4, (short) 3);
     }
 
 }

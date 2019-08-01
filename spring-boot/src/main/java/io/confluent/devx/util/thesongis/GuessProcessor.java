@@ -15,13 +15,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class GuessProcessor {
 
-    private static final String INPUTS = "INPUTS";
-    private static final String GUESSES = "GUESSES";
-
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    @KafkaListener(topics = INPUTS)
+    @KafkaListener(topics = "INPUTS")
     public void consume(ConsumerRecord<String, String> record) {
 
         Headers headers = record.headers();
@@ -39,7 +36,7 @@ public class GuessProcessor {
         if (modifiedGuess != null) {
             kafkaTemplate.send(
                 new ProducerRecord<String, String>(
-                    GUESSES, null, null, modifiedGuess, headers));
+                    "GUESSES", null, null, modifiedGuess, headers));
         }
 
     }

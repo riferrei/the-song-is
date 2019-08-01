@@ -57,16 +57,6 @@ resource "aws_s3_bucket_object" "error" {
   source = "./templates/error.html"
 }
 
-/*
-resource "aws_s3_bucket_object" "logo" {
-
-    bucket = aws_s3_bucket.the_song_is.bucket
-    key = "confluent.svg"
-    content_type = "image/svg+xml"
-    source = "./templates/confluent.svg"
-}
-*/
-
 resource "aws_s3_bucket_object" "logo" {
   bucket = aws_s3_bucket.the_song_is.bucket
   key = "apache-kafka.png"
@@ -81,40 +71,6 @@ data "template_file" "config_properties" {
     broker_list = var.ccloud_broker_list
     access_key = var.ccloud_access_key
     secret_key = var.ccloud_secret_key
-  }
-}
-
-resource "null_resource" "local_config" {
-  provisioner "local-exec" {
-    command = "rm ~/.ccloud/config"
-    interpreter = ["bash", "-c"]
-    on_failure = continue
-  }
-
-  provisioner "local-exec" {
-    command = "echo '${data.template_file.config_properties.rendered}' >> ~/.ccloud/config"
-    interpreter = ["bash", "-c"]
-    on_failure = continue
-  }
-
-  provisioner "local-exec" {
-    command = "ccloud topic create CURRENT_SONG --partitions 4 --replication-factor 3"
-    on_failure = continue
-  }
-
-  provisioner "local-exec" {
-    command = "ccloud topic create INPUTS --partitions 4 --replication-factor 3"
-    on_failure = continue
-  }
-
-  provisioner "local-exec" {
-    command = "ccloud topic create GUESSES --partitions 4 --replication-factor 3"
-    on_failure = continue
-  }
-
-  provisioner "local-exec" {
-    command = "ccloud topic create WINNERS --partitions 4 --replication-factor 3"
-    on_failure = continue
   }
 }
 

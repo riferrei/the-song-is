@@ -31,9 +31,6 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class SongHelperUtil {
 
-    private static final String CURRENT_SONG = "CURRENT_SONG";
-    private static final String WINNERS = "WINNERS";
-
     private static final String SPOTIFY_ACCOUNT_TOKENS = "https://accounts.spotify.com/api/token";
     private static final String SPOTIFY_PLAYER_DEVICES = "https://api.spotify.com/v1/me/player/devices";
     private static final String CURRENTLY_PLAYING_API = "https://api.spotify.com/v1/me/player/currently-playing";
@@ -61,7 +58,7 @@ public class SongHelperUtil {
     private String deviceId;
     private String currentSong;
 
-    @KafkaListener(topics = CURRENT_SONG)
+    @KafkaListener(topics = "CURRENT_SONG")
     public void updateCurrentSong(ConsumerRecord<String, String> record) {
         String json = record.value().toString();
         JsonElement ele = parser.parse(json);
@@ -197,7 +194,7 @@ public class SongHelperUtil {
         root.addProperty("author", author);
 
         ProducerRecord<String, String> record =
-            new ProducerRecord<String, String>(CURRENT_SONG,
+            new ProducerRecord<String, String>("CURRENT_SONG",
                 root.toString());
 
         kafkaTemplate.send(record);
@@ -205,7 +202,7 @@ public class SongHelperUtil {
 
     }
 
-    @KafkaListener(topics = WINNERS)
+    @KafkaListener(topics = "WINNERS")
     public void stopCurrentSong(ConsumerRecord<String, String> record) {
 
         HttpHeaders headers = new HttpHeaders();
