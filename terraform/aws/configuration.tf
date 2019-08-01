@@ -64,16 +64,6 @@ resource "aws_s3_bucket_object" "logo" {
   source = "./templates/apache-kafka.png"
 }
 
-data "template_file" "config_properties" {
-  template = file("templates/config.properties")
-
-  vars = {
-    broker_list = var.ccloud_broker_list
-    access_key = var.ccloud_access_key
-    secret_key = var.ccloud_secret_key
-  }
-}
-
 data "template_file" "redis_connector" {
   template = file("templates/redisConnector.json")
 
