@@ -5,6 +5,7 @@
 data "template_file" "rest_proxy_properties" {
   template = file("../util/rest-proxy.properties")
   vars = {
+    global_prefix              = var.global_prefix
     broker_list                = var.ccloud_broker_list
     access_key                 = var.ccloud_access_key
     secret_key                 = var.ccloud_secret_key
