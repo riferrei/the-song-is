@@ -70,7 +70,7 @@ resource "aws_route_table_association" "public_subnet_2_association" {
 }
 
 resource "aws_route_table_association" "private_subnet_association" {
-  count = length(var.aws_availability_zones)
+  count = length(data.aws_availability_zones.available.names)
 
   subnet_id      = element(aws_subnet.private_subnet.*.id, count.index)
   route_table_id = aws_route_table.private_route_table.id
@@ -103,11 +103,11 @@ variable "reserved_cidr_blocks" {
 }
 
 resource "aws_subnet" "private_subnet" {
-  count                   = length(var.aws_availability_zones)
+  count                   = length(data.aws_availability_zones.available.names)
   vpc_id                  = aws_vpc.default.id
   cidr_block              = element(var.reserved_cidr_blocks, count.index)
   map_public_ip_on_launch = false
-  availability_zone       = element(var.aws_availability_zones, count.index)
+  availability_zone       = data.aws_availability_zones.available.names[count.index]
 
   tags = {
     Name = "${var.global_prefix}-private-subnet-${count.index}"
@@ -118,7 +118,7 @@ resource "aws_subnet" "public_subnet_1" {
   vpc_id                  = aws_vpc.default.id
   cidr_block              = "10.0.7.0/24"
   map_public_ip_on_launch = true
-  availability_zone       = element(var.aws_availability_zones, 0)
+  availability_zone       = data.aws_availability_zones.available.names[0]
 
   tags = {
     Name = "${var.global_prefix}-public-subnet-1"
@@ -129,7 +129,7 @@ resource "aws_subnet" "public_subnet_2" {
   vpc_id                  = aws_vpc.default.id
   cidr_block              = "10.0.8.0/24"
   map_public_ip_on_launch = true
-  availability_zone       = element(var.aws_availability_zones, 1)
+  availability_zone       = data.aws_availability_zones.available.names[1]
 
   tags = {
     Name = "${var.global_prefix}-public-subnet-2"
@@ -142,7 +142,7 @@ resource "aws_subnet" "bastion_server" {
   vpc_id                  = aws_vpc.default.id
   cidr_block              = "10.0.9.0/24"
   map_public_ip_on_launch = true
-  availability_zone       = element(var.aws_availability_zones, 0)
+  availability_zone       = data.aws_availability_zones.available.names[0]
 
   tags = {
     Name = "${var.global_prefix}-bastion-server"

@@ -38,7 +38,7 @@ resource "aws_instance" "rest_proxy" {
   ]
 
   count         = var.instance_count["rest_proxy"]
-  ami           = var.ec2_ami
+  ami           = data.aws_ami.amazon_linux_2.id
   instance_type = "t3.xlarge"
   key_name      = aws_key_pair.generated_key.key_name
 
@@ -68,7 +68,7 @@ resource "aws_instance" "kafka_connect" {
   ]
 
   count         = var.instance_count["kafka_connect"]
-  ami           = var.ec2_ami
+  ami           = data.aws_ami.amazon_linux_2.id
   instance_type = "t3.2xlarge"
   key_name      = aws_key_pair.generated_key.key_name
 
@@ -98,7 +98,7 @@ resource "aws_instance" "ksql_server" {
   ]
 
   count         = var.instance_count["ksql_server"]
-  ami           = var.ec2_ami
+  ami           = data.aws_ami.amazon_linux_2.id
   instance_type = "t3.2xlarge"
   key_name      = aws_key_pair.generated_key.key_name
 
@@ -128,7 +128,7 @@ resource "aws_instance" "control_center" {
   ]
 
   count         = var.instance_count["control_center"]
-  ami           = var.ec2_ami
+  ami           = data.aws_ami.amazon_linux_2.id
   instance_type = "t3.2xlarge"
   key_name      = aws_key_pair.generated_key.key_name
 
@@ -164,7 +164,7 @@ resource "aws_instance" "bastion_server" {
 
   count = var.instance_count["bastion_server"] >= 1 ? 1 : 0
 
-  ami           = var.ec2_ami
+  ami           = data.aws_ami.amazon_linux_2.id
   instance_type = "t2.micro"
   key_name      = aws_key_pair.generated_key.key_name
 
@@ -195,7 +195,7 @@ resource "aws_instance" "jaeger_server" {
 
   count = var.instance_count["jaeger_server"] >= 1 ? var.instance_count["jaeger_server"] : 1
 
-  ami           = var.ec2_ami
+  ami           = data.aws_ami.amazon_linux_2.id
   instance_type = "t3.xlarge"
   key_name      = aws_key_pair.generated_key.key_name
 
@@ -226,7 +226,7 @@ resource "aws_instance" "spring_server" {
 
   count = var.instance_count["spring_server"]
 
-  ami           = var.ec2_ami
+  ami           = data.aws_ami.amazon_linux_2.id
   instance_type = "t3.xlarge"
   key_name      = aws_key_pair.generated_key.key_name
 
@@ -254,7 +254,7 @@ resource "aws_instance" "song_helper" {
 
   count = var.instance_count["song_helper"]
 
-  ami           = var.ec2_ami
+  ami           = data.aws_ami.amazon_linux_2.id
   instance_type = "t3.xlarge"
   key_name      = aws_key_pair.generated_key.key_name
 
@@ -285,7 +285,7 @@ resource "aws_instance" "redis_server" {
 
   count = var.instance_count["redis_server"]
 
-  ami           = var.ec2_ami
+  ami           = data.aws_ami.amazon_linux_2.id
   instance_type = "t3.xlarge"
   key_name      = aws_key_pair.generated_key.key_name
 

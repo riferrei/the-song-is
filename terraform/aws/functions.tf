@@ -80,10 +80,7 @@ resource "aws_lambda_function" "winner_function" {
   }
   vpc_config {
       security_group_ids = [aws_security_group.redis_server[0].id]
-      subnet_ids = [
-          aws_subnet.private_subnet[0].id,
-          aws_subnet.private_subnet[1].id,
-          aws_subnet.private_subnet[2].id]
+      subnet_ids = "${aws_subnet.private_subnet.*.id}"
   }
 }
 
@@ -194,10 +191,7 @@ resource "aws_lambda_function" "deletekeys_function" {
   }
   vpc_config {
       security_group_ids = [aws_security_group.redis_server[0].id]
-      subnet_ids = [
-          aws_subnet.private_subnet[0].id,
-          aws_subnet.private_subnet[1].id,
-          aws_subnet.private_subnet[2].id]
+      subnet_ids = "${aws_subnet.private_subnet.*.id}"
   }
 }
 

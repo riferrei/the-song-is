@@ -1,15 +1,22 @@
-variable "aws_region" {
-  default = "us-east-1"
+locals {
+  region = split(".", var.ccloud_broker_list)[1]
 }
 
-variable "aws_availability_zones" {
-  type = list(string)
-
-  default = ["us-east-1a", "us-east-1b", "us-east-1c"]
+data "aws_availability_zones" "available" {
+  state = "available"
 }
 
-variable "ec2_ami" {
-  default = "ami-0922553b7b0369273"
+data "aws_ami" "amazon_linux_2" {
+ most_recent = true
+ owners      = ["amazon"]
+ filter {
+   name   = "owner-alias"
+   values = ["amazon"]
+ }
+ filter {
+   name   = "name"
+   values = ["amzn2-ami-hvm*"]
+ }
 }
 
 variable "instance_count" {
