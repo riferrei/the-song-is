@@ -27,7 +27,7 @@ variable "instance_count" {
     "kafka_connect"  = 1
     "ksql_server"    = 2
     "control_center" = 0
-    "bastion_server" = 1
+    "bastion_server" = 0
     "spring_server"  = 2
     "redis_server"   = 1
     "jaeger_server"  = 1
@@ -36,11 +36,11 @@ variable "instance_count" {
 }
 
 variable "confluent_platform_location" {
-  default = "http://packages.confluent.io/archive/5.3/confluent-5.3.0-2.12.zip"
+  default = "http://packages.confluent.io/archive/5.3/confluent-5.3.1-2.12.zip"
 }
 
 variable "confluent_home_value" {
-  default = "/etc/confluent/confluent-5.3.0"
+  default = "/etc/confluent/confluent-5.3.1"
 }
 
 variable "jaeger_tracing_location" {
