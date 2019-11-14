@@ -11,7 +11,7 @@ resource "null_resource" "build_functions" {
 ###########################################
 
 resource "aws_iam_role_policy" "winner_policy" {
-  role = "${aws_iam_role.winner_role.name}"
+  role = aws_iam_role.winner_role.name
   policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -64,11 +64,11 @@ EOF
 }
 
 resource "aws_lambda_function" "winner_function" {
-  depends_on = ["null_resource.build_functions"]
+  depends_on = [null_resource.build_functions]
   function_name    = "winner"
   filename         = "../../aws-functions/deploy/winner.zip"
   handler          = "bin/winner"
-  role             = "${aws_iam_role.winner_role.arn}"
+  role             = aws_iam_role.winner_role.arn
   runtime          = "go1.x"
   memory_size      = 128
   timeout          = 5
@@ -80,24 +80,24 @@ resource "aws_lambda_function" "winner_function" {
   }
   vpc_config {
       security_group_ids = [aws_security_group.redis_server[0].id]
-      subnet_ids = "${aws_subnet.private_subnet.*.id}"
+      subnet_ids = aws_subnet.private_subnet.*.id
   }
 }
 
 resource "aws_lambda_permission" "winner_alexa_trigger" {
   statement_id 	= "AllowExecutionFromAlexa"
   action 		= "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.winner_function.function_name}"
+  function_name = aws_lambda_function.winner_function.function_name
   principal     = "alexa-appkit.amazon.com"
-  event_source_token = "${var.winner_skill_id}"
+  event_source_token = var.winner_skill_id
 }
 
 resource "aws_lambda_permission" "winner_cloudwatch_trigger" {
     statement_id = "AllowExecutionFromCloudWatch"
     action = "lambda:InvokeFunction"
-    function_name = "${aws_lambda_function.winner_function.function_name}"
+    function_name = aws_lambda_function.winner_function.function_name
     principal = "events.amazonaws.com"
-    source_arn = "${aws_cloudwatch_event_rule.winner_every_five_minutes.arn}"
+    source_arn = aws_cloudwatch_event_rule.winner_every_five_minutes.arn
 }
 
 resource "aws_cloudwatch_event_rule" "winner_every_five_minutes" {
@@ -107,10 +107,10 @@ resource "aws_cloudwatch_event_rule" "winner_every_five_minutes" {
 }
 
 resource "aws_cloudwatch_event_target" "winner_every_five_minutes" {
-    rule = "${aws_cloudwatch_event_rule.winner_every_five_minutes.name}"
+    rule = aws_cloudwatch_event_rule.winner_every_five_minutes.name
     target_id = "winner_function"
-    arn = "${aws_lambda_function.winner_function.arn}"
-    input = "${data.template_file.winner_intent.rendered}"
+    arn = aws_lambda_function.winner_function.arn
+    input = data.template_file.winner_intent.rendered
 }
 
 data "template_file" "winner_intent" {
@@ -122,7 +122,7 @@ data "template_file" "winner_intent" {
 ###########################################
 
 resource "aws_iam_role_policy" "deletekeys_policy" {
-  role = "${aws_iam_role.deletekeys_role.name}"
+  role = aws_iam_role.deletekeys_role.name
   policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -175,11 +175,11 @@ EOF
 }
 
 resource "aws_lambda_function" "deletekeys_function" {
-  depends_on = ["null_resource.build_functions"]
+  depends_on = [null_resource.build_functions]
   function_name    = "deletekeys"
   filename         = "../../aws-functions/deploy/deletekeys.zip"
   handler          = "bin/deletekeys"
-  role             = "${aws_iam_role.deletekeys_role.arn}"
+  role             = aws_iam_role.deletekeys_role.arn
   runtime          = "go1.x"
   memory_size      = 128
   timeout          = 5
@@ -191,24 +191,24 @@ resource "aws_lambda_function" "deletekeys_function" {
   }
   vpc_config {
       security_group_ids = [aws_security_group.redis_server[0].id]
-      subnet_ids = "${aws_subnet.private_subnet.*.id}"
+      subnet_ids = aws_subnet.private_subnet.*.id
   }
 }
 
 resource "aws_lambda_permission" "deletekeys_alexa_trigger" {
   statement_id 	= "AllowExecutionFromAlexa"
   action 		= "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.deletekeys_function.function_name}"
+  function_name = aws_lambda_function.deletekeys_function.function_name
   principal     = "alexa-appkit.amazon.com"
-  event_source_token = "${var.delete_keys_skill_id}"
+  event_source_token = var.delete_keys_skill_id
 }
 
 resource "aws_lambda_permission" "deletekeys_cloudwatch_trigger" {
     statement_id = "AllowExecutionFromCloudWatch"
     action = "lambda:InvokeFunction"
-    function_name = "${aws_lambda_function.deletekeys_function.function_name}"
+    function_name = aws_lambda_function.deletekeys_function.function_name
     principal = "events.amazonaws.com"
-    source_arn = "${aws_cloudwatch_event_rule.deletekeys_every_five_minutes.arn}"
+    source_arn = aws_cloudwatch_event_rule.deletekeys_every_five_minutes.arn
 }
 
 resource "aws_cloudwatch_event_rule" "deletekeys_every_five_minutes" {
@@ -218,10 +218,10 @@ resource "aws_cloudwatch_event_rule" "deletekeys_every_five_minutes" {
 }
 
 resource "aws_cloudwatch_event_target" "deletekeys_every_five_minutes" {
-    rule = "${aws_cloudwatch_event_rule.deletekeys_every_five_minutes.name}"
+    rule = aws_cloudwatch_event_rule.deletekeys_every_five_minutes.name
     target_id = "deletekeys_function"
-    arn = "${aws_lambda_function.deletekeys_function.arn}"
-    input = "${data.template_file.deletekeys_intent.rendered}"
+    arn = aws_lambda_function.deletekeys_function.arn
+    input = data.template_file.deletekeys_intent.rendered
 }
 
 data "template_file" "deletekeys_intent" {
