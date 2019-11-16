@@ -6,8 +6,8 @@ output "Guess_Application" {
   value = "http://${aws_s3_bucket.the_song_is.website_endpoint}"
 }
 
-output "REST_Proxy" {
-  value = var.instance_count["rest_proxy"] >= 1 ? join(",", formatlist("http://%s", aws_alb.rest_proxy.*.dns_name)) : "REST Proxy has been disabled"
+output "API_Gateway" {
+  value = "${aws_api_gateway_deployment.guess_v1.invoke_url}${aws_api_gateway_resource.guess_resource.path}"
 }
 
 output "Kafka_Connect" {
@@ -19,13 +19,6 @@ output "Kafka_Connect" {
 
 output "KSQL_Server" {
   value = var.instance_count["ksql_server"] >= 1 ? join(",", formatlist("http://%s", aws_alb.ksql_server.*.dns_name)) : "KSQL Server has been disabled"
-}
-
-output "Control_Center" {
-  value = var.instance_count["control_center"] >= 1 ? join(
-    ",",
-    formatlist("http://%s", aws_alb.control_center.*.dns_name),
-  ) : "Control Center has been disabled"
 }
 
 output "Jaeger_UI" {
@@ -41,4 +34,3 @@ output "Bastion_Server" {
     formatlist("%s", aws_instance.bastion_server.*.public_ip),
   )} -i cert.pem" : "Bastion Server has been disabled"
 }
-

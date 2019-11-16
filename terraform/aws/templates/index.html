@@ -93,9 +93,9 @@
 
       function send() {
 
-          var song = document.getElementById('song').value;
+          var guess = document.getElementById('guess').value;
 
-          if (song == '') {
+          if (guess == '') {
               alert('Your song guess cannot be empty');
               return;
           }
@@ -108,27 +108,29 @@
           }
           
           var record = {};
-          record.guess = {};
-          record.guess.song = song;
-          record.guess.user = user;
+          record.guess = guess;
+          record.user = user;
           produceRecord(record);
 
       }
 
         function produceRecord(record) {
 
+            /*
             var eventData = {};
             eventData.records = [{"value" : {}}];
             eventData.records[0].value = record;
             var json = JSON.stringify(eventData);
+            */
 
+            var json = JSON.stringify(record);
             const request = new XMLHttpRequest();
-            const url = "${rest_proxy_endpoint}/topics/INPUTS";
+            const url = "${guess_api_endpoint}";
             request.open("POST", url, true);
-            request.setRequestHeader("Content-Type", "application/vnd.kafka.json.v2+json");
+            request.setRequestHeader("Content-Type", "application/json");
             request.send(json);
 
-            document.getElementById('song').value = '';
+            document.getElementById('guess').value = '';
             document.getElementById('user').value = '';
             alert('Guess Sent Successfully!');
 
@@ -156,7 +158,7 @@
                 <table border="0">
                     <tr>
                         <td>Song Guess: </td>
-                        <td><input type="text" id="song" value="" /></td>
+                        <td><input type="text" id="guess" value="" /></td>
                     </tr>
                     <tr>
                         <td>Your Name: </td>

@@ -39,7 +39,7 @@ data "template_file" "index_html" {
   template = file("templates/index.html")
 
   vars = {
-    rest_proxy_endpoint = join(",", formatlist("http://%s", aws_alb.rest_proxy.*.dns_name))
+    guess_api_endpoint = "${aws_api_gateway_deployment.guess_v1.invoke_url}${aws_api_gateway_resource.guess_resource.path}"
   }
 }
 
@@ -62,6 +62,13 @@ resource "aws_s3_bucket_object" "logo" {
   key = "apache-kafka.png"
   content_type = "image/png"
   source = "./templates/apache-kafka.png"
+}
+
+resource "aws_s3_bucket_object" "logo2" {
+  bucket = aws_s3_bucket.the_song_is.bucket
+  key = "serverless.jpg"
+  content_type = "image/jpg"
+  source = "./templates/serverless.jpg"
 }
 
 data "template_file" "redis_connector" {

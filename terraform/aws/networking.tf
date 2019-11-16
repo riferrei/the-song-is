@@ -177,49 +177,6 @@ resource "aws_security_group" "load_balancer" {
   }
 }
 
-resource "aws_security_group" "rest_proxy" {
-  count = var.instance_count["rest_proxy"] >= 1 ? 1 : 0
-
-  name        = "${var.global_prefix}-rest-proxy"
-  description = "REST Proxy"
-  vpc_id      = aws_vpc.default.id
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["10.0.9.0/24"]
-  }
-
-  ingress {
-    from_port = 8082
-    to_port   = 8082
-    protocol  = "tcp"
-
-    cidr_blocks = [
-      "10.0.1.0/24",
-      "10.0.2.0/24",
-      "10.0.3.0/24",
-      "10.0.4.0/24",
-      "10.0.5.0/24",
-      "10.0.6.0/24",
-      "10.0.7.0/24",
-      "10.0.8.0/24",
-    ]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "${var.global_prefix}-rest-proxy"
-  }
-}
-
 resource "aws_security_group" "kafka_connect" {
   count = var.instance_count["kafka_connect"] >= 1 ? 1 : 0
 
@@ -303,49 +260,6 @@ resource "aws_security_group" "ksql_server" {
 
   tags = {
     Name = "${var.global_prefix}-ksql-server"
-  }
-}
-
-resource "aws_security_group" "control_center" {
-  count = var.instance_count["control_center"] >= 1 ? 1 : 0
-
-  name        = "${var.global_prefix}-control-center"
-  description = "Control Center"
-  vpc_id      = aws_vpc.default.id
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["10.0.9.0/24"]
-  }
-
-  ingress {
-    from_port = 9021
-    to_port   = 9021
-    protocol  = "tcp"
-
-    cidr_blocks = [
-      "10.0.1.0/24",
-      "10.0.2.0/24",
-      "10.0.3.0/24",
-      "10.0.4.0/24",
-      "10.0.5.0/24",
-      "10.0.6.0/24",
-      "10.0.7.0/24",
-      "10.0.8.0/24",
-    ]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "${var.global_prefix}-control-center"
   }
 }
 
@@ -468,32 +382,6 @@ resource "aws_security_group" "song_helper" {
   }
 }
 
-resource "aws_security_group" "spring_server" {
-  count = var.instance_count["spring_server"] >= 1 ? 1 : 0
-
-  name        = "${var.global_prefix}-spring-server"
-  description = "Spring Server"
-  vpc_id      = aws_vpc.default.id
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["10.0.9.0/24"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "${var.global_prefix}-spring-server"
-  }
-}
-
 resource "aws_security_group" "redis_server" {
   count = var.instance_count["redis_server"] >= 1 ? 1 : 0
 
@@ -537,4 +425,3 @@ resource "aws_security_group" "redis_server" {
     Name = "${var.global_prefix}-redis-server"
   }
 }
-
