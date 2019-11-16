@@ -54,12 +54,6 @@ public class GuessHandler implements RequestHandler<Map<String, Object>, Map<Str
             });
             producer.flush();
 
-            /*
-            try {
-                Thread.sleep(1000);
-            } catch (final InterruptedException ie) {}
-            */
-
         } else {
             logger.log("Wake up event received: " + request);
         }
