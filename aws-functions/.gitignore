@@ -10,3 +10,6 @@ vendor
 *.test
 *.out
 target
+.classpath
+.factorypath
+.settings
