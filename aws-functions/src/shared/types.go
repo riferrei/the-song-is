@@ -2,17 +2,6 @@ package shared
 
 import "time"
 
-// GuessEvent represents the user guess
-type GuessEvent struct {
-	Guess string `json:"guess"`
-	User  string `json:"user"`
-}
-
-// GuessResponse is the reply back
-type GuessResponse struct {
-	Message string `json:"message"`
-}
-
 // AlexaRequest represents the Alexa request
 type AlexaRequest struct {
 	Version string `json:"version"`

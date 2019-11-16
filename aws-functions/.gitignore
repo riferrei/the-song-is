@@ -9,3 +9,4 @@ vendor
 *.dylib
 *.test
 *.out
+target
