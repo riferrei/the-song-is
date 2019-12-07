@@ -1,4 +1,4 @@
-package io.confluent.devx.util.thesongis;
+package io.confluent.cloud.thesongis;
 
 import java.util.Arrays;
 
@@ -29,7 +29,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class SongHelperUtil {
+public class SongHelper {
 
     private static final String SPOTIFY_ACCOUNT_TOKENS = "https://accounts.spotify.com/api/token";
     private static final String SPOTIFY_PLAYER_DEVICES = "https://api.spotify.com/v1/me/player/devices";
@@ -51,7 +51,7 @@ public class SongHelperUtil {
     @Value("${REFRESH_TOKEN}")
     private String refreshToken;
 
-    private final Logger logger = LoggerFactory.getLogger(SongHelperUtil.class);
+    private final Logger logger = LoggerFactory.getLogger(SongHelper.class);
     private final RestTemplate rest = new RestTemplate();
     private final JsonParser parser = new JsonParser();
 
@@ -161,7 +161,6 @@ public class SongHelperUtil {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers.setBasicAuth(clientId, clientSecret);
-
         MultiValueMap<String, String> values = new LinkedMultiValueMap<String, String>();
         values.add("grant_type", "refresh_token");
         values.add("refresh_token", refreshToken);
@@ -209,7 +208,7 @@ public class SongHelperUtil {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         headers.setBearerAuth(accessToken);
-
+        
         HttpEntity<String> request =
             new HttpEntity<String>("parameters", headers);
 

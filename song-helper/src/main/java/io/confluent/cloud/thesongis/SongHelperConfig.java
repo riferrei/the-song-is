@@ -1,4 +1,4 @@
-package io.confluent.devx.util.thesongis;
+package io.confluent.cloud.thesongis;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
 @Configuration
-public class MyConfiguration {
+public class SongHelperConfig {
 
     @Value("${BOOTSTRAP_SERVERS}")
     private String bootstrapServers;

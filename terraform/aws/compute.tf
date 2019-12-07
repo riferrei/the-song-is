@@ -245,7 +245,7 @@ resource "aws_alb" "kafka_connect" {
   count      = var.instance_count["kafka_connect"] >= 1 ? 1 : 0
 
   name            = "${var.global_prefix}-kafka-connect"
-  subnets         = [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id]
+  subnets = aws_subnet.public_subnet[*].id
   security_groups = [aws_security_group.load_balancer.id]
   internal        = false
 
@@ -302,7 +302,7 @@ resource "aws_alb" "ksql_server" {
   count      = var.instance_count["ksql_server"] >= 1 ? 1 : 0
 
   name            = "${var.global_prefix}-ksql-server"
-  subnets         = [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id]
+  subnets = aws_subnet.public_subnet[*].id
   security_groups = [aws_security_group.load_balancer.id]
   internal        = false
 
@@ -356,7 +356,7 @@ resource "aws_alb" "jaeger_server" {
   depends_on = [aws_instance.jaeger_server]
 
   name            = "${var.global_prefix}-jaeger-server"
-  subnets         = [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id]
+  subnets = aws_subnet.public_subnet[*].id
   security_groups = [aws_security_group.load_balancer.id]
   internal        = false
 

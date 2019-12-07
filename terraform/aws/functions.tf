@@ -69,9 +69,9 @@ resource "aws_lambda_function" "guess_function" {
     aws_iam_role.guess_role]
   function_name = "guess"
   filename = "../../aws-functions/deploy/guess-1.0.jar"
-  handler = "io.confluent.cloud.GuessHandler"
+  handler = "io.confluent.cloud.thesongis.GuessHandler"
   role = aws_iam_role.guess_role.arn
-  runtime = "java8"
+  runtime = "java11"
   memory_size = 512
   timeout = 60
   environment {

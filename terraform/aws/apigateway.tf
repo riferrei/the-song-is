@@ -4,6 +4,9 @@
 
 resource "aws_api_gateway_rest_api" "guess_api" {
   name = "guess_api"
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
 }
 
 resource "aws_api_gateway_resource" "guess_resource" {
@@ -32,8 +35,8 @@ resource "aws_api_gateway_integration" "post_integration" {
   resource_id = aws_api_gateway_resource.guess_resource.id
   http_method = aws_api_gateway_method.post_method.http_method
   integration_http_method = aws_api_gateway_method.post_method.http_method
-  type = "AWS_PROXY"
   uri = aws_lambda_function.guess_function.invoke_arn
+  type = "AWS_PROXY"
 }
 
 resource "aws_api_gateway_deployment" "guess_v1" {
@@ -88,7 +91,7 @@ resource "aws_api_gateway_integration_response" "cors_integration_response" {
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = "'*'"
     "method.response.header.Access-Control-Allow-Methods" = "'POST'"
-    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+    "method.response.header.Access-Control-Allow-Origin" = "'http://${aws_s3_bucket.the_song_is.website_endpoint}'"
   }
 }
   

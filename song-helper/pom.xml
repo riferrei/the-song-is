@@ -11,7 +11,7 @@
 		<relativePath/>
 	</parent>
 
-	<groupId>io.confluent.devx.util</groupId>
+	<groupId>io.confluent.cloud.thesongis</groupId>
 	<artifactId>song-helper</artifactId>
 	<name>song-helper</name>
 	<version>1.0</version>

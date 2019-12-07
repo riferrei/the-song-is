@@ -21,10 +21,9 @@ data "aws_ami" "amazon_linux_2" {
 
 variable "instance_count" {
   type = map(string)
-
   default = {
     "kafka_connect"  = 1
-    "ksql_server"    = 2
+    "ksql_server"    = 1
     "bastion_server" = 1
     "redis_server"   = 1
     "jaeger_server"  = 1

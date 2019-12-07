@@ -1,4 +1,4 @@
-package io.confluent.cloud;
+package io.confluent.cloud.thesongis;
 
 import java.util.HashMap;
 import java.util.Map;
