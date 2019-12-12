@@ -91,7 +91,7 @@ resource "aws_api_gateway_integration_response" "cors_integration_response" {
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = "'*'"
     "method.response.header.Access-Control-Allow-Methods" = "'POST'"
-    "method.response.header.Access-Control-Allow-Origin" = "'http://${aws_s3_bucket.the_song_is.website_endpoint}'"
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
   }
 }
   
